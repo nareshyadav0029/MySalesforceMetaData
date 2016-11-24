@@ -1,0 +1,49 @@
+<apex:page controller="SalesforceHandsOnGuideController" tabStyle="Account" standardStylesheets="false">
+    <!-- Scripts -->
+        <apex:includeScript value="{!$Resource.JQuery}"/>
+        <apex:includeScript value="{!$Resource.JqueryFlip}"/>
+        
+        <script>
+            $( document ).ready(function() {
+                $("#card").flip();
+            });
+        </script>
+    <!-- Scripts End -->
+    <!-- Styles -->
+        <style type="text/css">
+            .front{
+                background: #d9edf7 none repeat scroll 0 0;
+                border: 1px solid #d9edf7;
+                border-radius: 5px;
+                font-family: Times New Roman;
+                font-size: 30px;
+                height: 300px !important;
+                margin-left: 150px;
+                width: 600px !important;
+                padding: 20px;
+            }
+            .back{
+                background: #EEEEEE none repeat scroll 0 0;
+                border: 1px solid #EEEEEE;
+                height: 300px !important;
+                width: 600px !important;
+                margin-left: 150px;
+                border-radius: 5px;
+                padding: 20px;
+            }
+        </style>
+    <!-- Styles End -->
+    <div id="card"> 
+      <div class="front"> 
+        What is the maximum number of Master-Detail relationships that can be created on a custom object?<br/><br/>
+        A.  1<br/>
+        B.  2<br/> 
+        C.  4 <br/>
+        D.  Unlimited 
+      </div> 
+      <div class="back">
+        <p style="margin-top: 100px;text-align: center;font-size: 50px;font-family: times new roman;">B</p>
+      </div> 
+    </div>
+    
+</apex:page>

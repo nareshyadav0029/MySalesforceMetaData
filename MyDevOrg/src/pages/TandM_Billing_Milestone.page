@@ -1,0 +1,36 @@
+<apex:page controller="TimeAndMatController" tabStyle="Project__c">
+
+<style>
+    .a{
+        font-weight:Bold !important;
+        color:#696969 !important;
+        font-size: 25px !important;
+    }
+    p{
+        color:#A9A9A9;
+    }
+    h1{
+        font-size:20px !important;
+        background:#808080 !important;
+        color:#FFFFFF !important;
+        width:138.5% !important;
+        margin-left:10px !important;
+    }
+</style>
+
+<apex:form >
+    <apex:outputText value="Create Time & Materials Billing Milestone" styleClass="a"/>
+    <br/>
+    <br/>
+    <br/>
+    <p>
+        {!Page_instructions}
+    </P>
+    <br/>
+    <apex:sectionHeader title="Project Information"/> 
+    <apex:pageBlock >
+
+   </apex:pageBlock>
+   <br/>    
+</apex:form>
+</apex:page>

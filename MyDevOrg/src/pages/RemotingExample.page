@@ -1,0 +1,94 @@
+<apex:page controller="AccountRemoter" sidebar="false" standardStylesheets="false">
+    <apex:includeScript value="{!URLFOR($Resource.jQueryAutoComplete, 'js/jquery-1.6.2.min.js')}"/>
+    <style type="text/css">
+        @import "{!URLFOR($Resource.BootstrapNew,'css/bootstrap.min.css')}";
+    </style>
+    <style>
+        .search{
+            color:#fff !important;
+            background:#5cb85c !important;
+            border-color:#4cae4c !important;
+            height:32px !important;
+        }
+        .search.focus,.search:focus{
+            color:#fff !important;
+            background-color:#449d44 !important;
+            border-color:#255625 !important;
+        }
+        .search:hover{
+            color:#fff !important;
+            background-color:#449d44 !important;
+            border-color:#398439 !important;
+        }
+    </style>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('#responseErrors').hide();
+            $('#tbl').hide();
+        });
+        function getRemoteAccount() {
+            var accountName = document.getElementById('acctSearch').value;
+    
+            Visualforce.remoting.Manager.invokeAction(
+                '{!$RemoteAction.AccountRemoter.getAccount}',
+                accountName, 
+                function(result, event){
+                    if (event.status) {
+                        $('#responseErrors').hide();
+                        $('#tbl').show();
+                        // Get DOM IDs for HTML and Visualforce elements like this
+                        document.getElementById('remoteAcctName').innerHTML = result.Name
+                        document.getElementById('acctPhone').innerHTML = result.Phone;
+                    } else if (event.type === 'exception') {
+                        $('#responseErrors').show();
+                        $('#tbl').hide();
+                        document.getElementById("responseErrors").innerHTML = 
+                            '<b>'+event.message+'</b>';
+                    } else {
+                        $('#responseErrors').show();
+                        $('#tbl').hide();
+                        document.getElementById("responseErrors").innerHTML = event.message;
+                    }
+                }, 
+                {escape: true}
+            );
+        }
+    </script>
+    <div class="row">
+        <div class="col-sm-3"></div>
+        <div class="col-sm-4">
+            <input id="acctSearch" type="text" class="form-control" placeholder="Account Name"/>
+        </div>
+        <div class="col-sm-4">
+            <button type="button" class="search" onclick="getRemoteAccount()">
+                Search
+                <span class="glyphicon glyphicon-search" style="padding-left: 2px;padding-right: 2px;"></span>
+            </button>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="alert alert-danger" id="responseErrors" style="margin-top: 2%;"></div>
+        </div>
+    </div>
+    <br/><br/>
+    <div class="row" id="tbl">
+        <div class="col-sm-12">
+            <table class="table table-hover table-bordered">
+                <tr class="success">
+                    <th>Name</th>
+                    <th>Phone</th>
+                    <th>Fax</th>
+                    <th>Website</th>
+                </tr>
+                <tr>
+                    <td id="remoteAcctName"></td>
+                    <td id="acctPhone"></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</apex:page>

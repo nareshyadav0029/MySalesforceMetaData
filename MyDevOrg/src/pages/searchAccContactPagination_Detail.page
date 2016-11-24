@@ -1,0 +1,13 @@
+<apex:page renderAs="pdf" controller="searchAccContactPaginationcont" action="{!DetailIdsFromUrl}">
+    <apex:form >
+        <apex:pageBlock >
+            <apex:pageBlockTable value="{!con_detail}" var="con" columns="5">
+                <apex:column headerValue="FName" value="{!con.firstname}"/>
+                <apex:column headerValue="LName" value="{!con.lastname}"/>
+                <apex:column headerValue="Account Name" value="{!con.AccountId}"/>
+                <apex:column value="{!con.email}"/>
+                <apex:column value="{!con.phone}"/>
+            </apex:pageBlockTable>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

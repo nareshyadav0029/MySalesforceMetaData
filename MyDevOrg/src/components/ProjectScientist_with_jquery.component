@@ -1,0 +1,116 @@
+<apex:component layout="none">
+    <apex:includeScript value="{!$Resource.JQuery}"/>
+    <style>
+        .logo{
+            margin-left:50px;
+        }
+        .menu{
+            width:100%;
+            height:35px;
+            margin-top:70px;
+            margin-left:50px;
+            margin-bottom:0px;    
+        }
+        .menu ul{
+            display:inline;
+        }
+        .menu ul li{
+            display:inline;
+            margin-left:0px;
+            display:block;
+            float:left;
+        }
+        .menu ul li a{
+            padding:10px;
+            margin-right:2px;
+            display:block;
+            text-decoration:none;
+            color:#FFF;
+        }
+        #h{
+            background:#1588C7;
+            border-radius:5px;
+            border-bottom-left-radius:0px;
+            border-bottom-right-radius:0px;
+        }
+        #Add{
+            background:#F7941D;
+            border-radius:5px;
+            border-bottom-left-radius:0px;
+            border-bottom-right-radius:0px;
+        }
+        #Mem{
+            background:#CED700;
+            border-radius:5px;
+            border-bottom-left-radius:0px;
+            border-bottom-right-radius:0px;
+        }
+        #App{
+            background:#E14EA7;
+            border-radius:5px;
+            border-bottom-left-radius:0px;
+            border-bottom-right-radius:0px;
+        }
+        #Rec{
+            background:#F56366;
+            border-radius:5px;
+            border-bottom-left-radius:0px;
+            border-bottom-right-radius:0px;
+        }
+        #Sch{
+            background:#EEEA17;
+            border-radius:5px;
+            border-bottom-left-radius:0px;
+            border-bottom-right-radius:0px;
+        }
+    </style>
+    
+    <div class="container">
+            <div class="logo">
+                <a href="#"><img src="{!$Resource.Scientist}" style="margin-top:20px;"/></a>
+            </div>
+            
+            <div class="menu">
+                <ul id="nav">
+                    <li><a id="h" href="#"><img src="{!$Resource.Home}" style="height:15px; width:16px;" /></a></li>
+                    <li><a id="Add" href="#">Address</a></li>
+                    <li><a id="Mem" href="#">Members</a></li>
+                    <li><a id="App" href="#">Application</a></li>
+                    <li><a id="Rec" href="#">Recommendation</a></li>
+                    <li><a id="Sch" href="#">Scholarships</a></li>
+               </ul>
+          </div>
+          
+          <div class="foot" style="padding-top:12px; padding-bottom:12px; width:100%;">
+          
+          </div>
+            
+        </div>
+            
+    <script type="text/javascript">
+        
+        $('#nav > li > a').click(function(e) {
+            e.preventDefault(); //prevent the link from being followed
+            $('#nav > li > a').removeClass('active');
+            $(this).addClass('active');
+            var x = $(this).css('background-color');
+            var color = hexc(x);
+            $(".foot").css("background-color",color);
+            return false;
+        });
+        
+        function hexc(colorval) {
+        var color='';
+        var parts = colorval.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
+        delete(parts[0]);
+        for (var i = 1; i <= 3; ++i) {
+        parts[i] = parseInt(parts[i]).toString(16);
+        if (parts[i].length == 1) parts[i] = '0' + parts[i];
+        }
+        color = '#' + parts.join('');
+        return color;
+    }
+
+    </script>
+
+</apex:component>

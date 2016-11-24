@@ -1,0 +1,47 @@
+<apex:page sidebar="false" controller="TreeViewController" standardStylesheets="false" showHeader="false">
+
+    <link rel="stylesheet" href="{!URLFOR($Resource.treeView,'easyTree.css')}"/>
+    <style type="text/css">
+        @import "{!URLFOR($Resource.BootstrapNew,'css/bootstrap.min.css')}";
+    </style>
+    
+    <script src="{!$Resource.JQuery}"></script>
+    <script src="{!URLFOR($Resource.TreeView,'easyTree.js')}"></script>
+    
+    <style>
+        .easy-tree-toolbar{
+            background:lightgrey !important;
+        }
+    </style>
+            
+    <div class="jquery-script-clear"></div>
+    
+        <div class="col-md-12">
+            <div class="col-md-4">
+                <h3 class="text-success">Account And Contact Tree View</h3>
+                <div class="easy-tree" style="background:black;">
+                    <ul>
+                        <apex:repeat value="{!accConList}" var="accCon">
+                        <li> {!accCon.Name}
+                            <ul>
+                                <apex:repeat value="{!accCon.Contacts}" var="con">
+                                <li>{!con.Name}</li>
+                                </apex:repeat>
+                            </ul>
+                        </li>
+                        </apex:repeat>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    <script>
+        function init() {
+            $('.easy-tree').EasyTree({
+                addable: true,
+                editable: true,
+                deletable: true
+            });
+        }
+        window.onload = init();
+    </script>
+</apex:page>

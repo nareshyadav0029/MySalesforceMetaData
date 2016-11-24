@@ -1,0 +1,5 @@
+<apex:page standardStylesheets="false" tabStyle="Student__c" showHeader="false" sidebar="false">
+    <c:BootStrapComponent >
+    
+    </c:BootStrapComponent>
+</apex:page>

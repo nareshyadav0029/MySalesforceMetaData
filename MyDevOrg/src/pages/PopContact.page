@@ -1,0 +1,20 @@
+<apex:page controller="PopContactController" tabStyle="Student__c">
+    <apex:form >
+    <script type="text/javascript">
+        function openPopUpWindow(conid){       
+        window.open("https://c.ap1.visual.force.com/apex/OpenWindow?imgid="+conid,'Add Image','width=300,height=400');
+        }
+    </script>
+            <apex:pageBlock title="ContactList">
+                <apex:pageBlockSection columns="1" title="ContactList"> 
+                    <apex:pageBlockTable value="{!modelpop}" var="model">
+                              <apex:column headerValue="S.No" ><apex:commandLink value="{!model.s_no}" onclick="openPopUpWindow('{!model.img}'); return false;" /></apex:column>
+                             <apex:column headerValue="FirstName" ><apex:commandLink value="{!model.con.firstname}" onclick="openPopUpWindow('{!model.img}'); return false;"  /></apex:column>
+                             <apex:column headerValue="LastName" ><apex:commandLink value="{!model.con.lastname}" onclick="openPopUpWindow('{!model.img}'); return false;" /></apex:column>
+                             <apex:column headerValue="Email" ><apex:commandLink value="{!model.con.Email}" onclick="openPopUpWindow('{!model.img}'); return false;"  /></apex:column>
+                             <apex:column headerValue="Image" ><apex:image value="{!model.img}" onclick="openPopUpWindow('{!model.img}'); return false;" style="height:50px; width:50px; " /></apex:column>                             
+                    </apex:pageBlockTable>
+                </apex:pageBlockSection>
+            </apex:pageBlock>
+    </apex:form>
+</apex:page>

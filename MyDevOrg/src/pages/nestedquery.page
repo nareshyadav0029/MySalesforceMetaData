@@ -1,0 +1,71 @@
+<apex:page tabstyle="Account" controller="nestedqueryController" showHeader="true">
+<script>
+        function switchMenu(obj,obj1,obj2) 
+        {
+            var el = document.getElementById(obj);                                       
+            if ( el.style.display != 'none' ) {
+            el.style.display = 'none';
+            }
+            else {
+            el.style.display = '';
+            }
+            var e2 = document.getElementById(obj1);                                       
+            if ( e2.style.display != 'none' ) {
+            e2.style.display = 'none';
+            }
+            else {
+            e2.style.display = '';
+            }
+             var e3 = document.getElementById(obj2);                                       
+            if ( e2.style.display != 'none' ) {
+            e3.style.display = 'none';
+            }
+            else {
+            e3.style.display = '';
+            }
+
+        }
+</script>
+    <apex:pageblock >     
+        <apex:pageblocktable value="{!accsandtmember}"  var="accdet">
+            <apex:column >
+                   <apex:facet name="header">                                        
+                         Team Members                                                                               
+                    </apex:facet>
+                    <apex:outputpanel id="plusimage">
+                        <a id="Users_icon" onclick="switchMenu('{!$Component.inlinetablesec}','{!$Component.minusimage}','{!$Component.plusimage}')" title="Expand - Team Member's">
+                            <img class="setupImage" width="11" height="11" title="Expand - Manage Users - Level 1" alt="Expand - Manage Users - Level 1" src="/img/alohaSkin/setup/setup_plus_lev1.gif"/>
+                        </a>
+                          <!--<apex:image url="{!$Resource.Expand1}" height="20px" width="20px" style="cursor : pointer;" onclick="switchMenu('{!$Component.inlinetablesec}','{!$Component.minusimage}','{!$Component.plusimage}')" title="Expand - Team Member's"/>-->
+                    </apex:outputpanel>
+                    <apex:outputpanel id="minusimage" style="display:none;">
+                        <a id="Users_icon" style="cursor : pointer;" onclick="switchMenu('{!$Component.inlinetablesec}','{!$Component.plusimage}','{!$Component.minusimage}')" title="Collapse - Team Member's">
+                            <img class="setupImage" width="11" height="11" title="Collapse - Manage Users - Level 1" alt="Collapse - Manage Users - Level 1" src="/img/alohaSkin/setup/setup_minus_lev1.gif"/>
+                        </a>
+                        <!--<apex:image url="{!$Resource.Collapse1}" height="20px" width="20px" style="cursor : pointer;" onclick="switchMenu('{!$Component.inlinetablesec}','{!$Component.plusimage}','{!$Component.minusimage}')" title="Collapse - Team Member's"/>-->
+                    </apex:outputpanel>
+                    <apex:outputpanel id="inlinetablesec" style="display:none;">
+                                                <apex:variable value="{!0}" var="rowNum"/>
+                                                <apex:repeat var="count" value="{!accdet.AccountTeamMembers}">
+                                                    <apex:variable var="rowNum" value="{!rowNum+1}"/>
+                                                </apex:repeat>
+                            <apex:outputText rendered="{!rowNum=0}">  No Team Members  </apex:outputText>
+                        <apex:pageBlockTable value="{!accdet.AccountTeamMembers}" var="tm" rendered="{!rowNum>0}">
+                            <apex:column headerValue="Team Member">
+                                   <apex:outputfield value="{!tm.User.Name}"/>
+                             </apex:column>
+                             <apex:column headerValue="Role">
+                                   <apex:outputfield value="{!tm.TeamMemberRole}"/>
+                             </apex:column>                          
+                        </apex:pageBlocktable>
+                   </apex:outputpanel>     
+            </apex:column>
+            <apex:column headervalue="Account Name">
+                    <apex:outputtext value="{!accdet.Name}"/>
+            </apex:column>
+            <apex:column headervalue="Billing Country">
+                    <apex:outputtext value="{!accdet.BillingCountry}"/>
+            </apex:column>
+        </apex:pageblocktable>
+    </apex:pageblock>
+</apex:page>

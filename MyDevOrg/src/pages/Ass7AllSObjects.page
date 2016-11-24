@@ -1,0 +1,68 @@
+<apex:page controller="Ass7AllSObjectsController" tabStyle="Class__c">
+<apex:form >
+    <apex:pageblock >
+    
+        <apex:actionStatus id="Getting" startText="Getting Fields"/>
+        <apex:actionFunction status="Getting" name="GetFields" action="{!getfields}" reRender="Refresh"/>
+        
+        <apex:actionStatus id="GettingType" startText="Getting Type"/>
+        <apex:actionFunction status="GettingType" name="GetType" action="{!getfieldtype}" reRender="Refresh"/>
+        
+        <apex:actionStatus id="Adding" startText="Adding New Row"/>
+        <apex:actionFunction status="Adding" name="addrow" action="{!AddRow}" reRender="Refresh"/>
+    
+        <apex:pageblocksection columns="1" title="Objects">
+            <apex:selectList size="1" multiselect="false" onchange="GetFields(); return false;" value="{!selected_object}">
+                <apex:selectOptions value="{!allsobjects}" />
+            </apex:selectList>
+            <hr/>
+            <apex:commandButton value="AddRow" onclick="addrow(); return false;"/>
+            <hr/>
+        </apex:pageblocksection>
+        <apex:outputPanel title="Fields" id="Refresh">
+            <table class="list">
+                <tr>
+                        <th>Field Pick List</th>
+                        <th>Field Type</th>
+                        <th>Default Value</th>
+               </tr>
+               
+               <apex:repeat value="{!allf}" var="all">
+                        <tr>
+                            <td>
+                                <apex:selectList size="1" onchange="GetType(); return false"   value="{!all.selected_field}"> 
+                                    <apex:selectOptions value="{!all.allfields}"/>
+                                </apex:selectList>    
+                            </td>
+                            <td>
+                                {!all.fieldtype}
+                            </td>
+                            <td>
+                                <apex:inputField value="{!obj[all.selected_field]}"/>
+                            </td>
+                        </tr>
+                    </apex:repeat>
+                    
+                    <apex:repeat value="{!mclass}" var="modal">
+                        <tr>
+                            <td>
+                                {!modal.label}
+                            </td>
+                            <td>
+                                {!modal.fieldtype}
+                            </td>
+                            <td>
+                                <apex:inputField required="false" value="{!obj[modal.name]}"/>
+                            </td>
+                        </tr>
+                    </apex:repeat>
+                    
+            </table>
+            
+            <hr/>
+            <apex:commandButton value="Next" action="{!NextPage}"/>
+            
+        </apex:outputPanel>
+    </apex:pageblock>
+</apex:form>
+</apex:page>

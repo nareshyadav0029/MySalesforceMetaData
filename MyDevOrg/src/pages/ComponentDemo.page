@@ -1,0 +1,10 @@
+<apex:page standardController="Contact" tabStyle="Contact">
+    <c:MyHeader Title="Home Page">
+        <script>
+            function demo(){
+                alert("warning !!!");
+            }
+            demo();
+        </script>
+    </c:MyHeader>
+</apex:page>

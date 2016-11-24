@@ -1,0 +1,121 @@
+<apex:page controller="Austral_PrecastController">
+<script src="{!URLFOR($Resource.JqueryDialogBox,'jQueryDialog/jQueryDialog/jquery-1.9.1.js')}" type="text/javascript"></script>
+<script src="{!URLFOR($Resource.JqueryDialogBox,'jQueryDialog/jQueryDialog/jquery-ui.js')}" type="text/javascript"></script>
+<link rel="stylesheet" href="{!URLFOR($Resource.JqueryDialogBox,'jQueryDialog/jQueryDialog/jquery-ui.css')}"/>
+<script>
+    $(document).ready(function(){
+        var dlg = $("#pdDiv").dialog({
+                    width:700,
+                    height:300,
+                    autoOpen: false,
+                     show: {
+                        effect: "blind",
+                        duration: 500
+                     },
+                        hide: {
+                            effect: "explode",
+                            duration: 500
+                        }
+                    });
+        
+       dlg.parent().appendTo("[id$='form']");
+    });
+
+     function divOpen() {
+         $("#pdDiv").dialog("open");
+     } 
+    
+     function divClose() {
+         $("#pdDiv").dialog("close");
+     }
+</script>
+
+<style>
+    .btn{
+            height:28px;
+            width:50px;
+            border-color:#6B8E23;
+     }
+    .btn:hover{
+                background:#00BFFF;
+                color:#FFFFFF;
+     }
+</style>
+
+    <apex:form id="form">
+    
+    <apex:actionStatus id="status" startText="Wait..."/>
+    <apex:actionFunction status="status" reRender="xyz" name="updatePop" action="{!fillPopup}" oncomplete="divOpen();">       
+        <apex:param value="" name="jdate" assignTo="{!jDate}"/>
+        <apex:param value="" name="jid" assignTo="{!jId}"/>
+    </apex:actionFunction>
+    
+    <apex:pageMessages ></apex:pageMessages>
+       
+        <apex:pageBlock >
+            <table cellspacing = "15px">
+                <tr>
+                    <td>Start Date</td>
+                    <td><apex:inputField value="{!date_list.Start_Date__c}"/></td>
+                    <td>End Date</td>
+                    <td><apex:inputField value="{!date_list.End_Date__c}"/></td>
+                    <td><apex:commandButton value="View" action="{!View}"  styleClass="btn"/></td>
+               </tr>
+            </table>
+        </apex:pageBlock>
+        
+            <table border="1px" cellpadding="5px">
+                <tr>
+                    <th>Job</th>
+                    <th></th>
+                    <apex:repeat value="{!date_diff}" var="d">
+                       <th bgcolor="{!IF(MOD(d-DATE(1900,1,6),7)== 1,'red','white')}"><apex:outputText value="{0,date, yyyy/MM/dd}">
+                           <apex:param value="{!d}"/>
+                       </apex:outputText></th>
+                   </apex:repeat>
+                </tr>
+                    <apex:repeat value="{!modals}" var="job">
+                        <tr>
+                            <td rowspan="3">{!job.jobName}</td>
+                            <td>Drawing</td>
+                            <apex:repeat value="{!job.drawingCount}" var="draw"> 
+                                <td bgcolor="{!IF(MOD(draw.Hdate-DATE(1900,1,6),7)== 1,'red','white')}" onclick="updatePop('{!TEXT(draw.Hdate)}', '{!job.jobId}'); return false">{!draw.drawing}</td>
+                            </apex:repeat>
+                        </tr>
+                        
+                        <tr>
+                            <td>Production</td>
+                            <apex:repeat value="{!job.productionCount}" var="pro"> 
+                                <td bgcolor="{!IF(MOD(pro.Hdate-DATE(1900,1,6),7)== 1,'red','white')}" onclick="updatePop('{!TEXT(pro.Hdate)}', '{!job.jobId}'); return false">{!pro.production}</td>
+                            </apex:repeat>
+                        </tr>
+                        
+                        <tr>
+                            <td>Installation</td>
+                            <apex:repeat value="{!job.installCount}" var="ins"> 
+                                <td bgcolor="{!IF(MOD(ins.Hdate-DATE(1900,1,6),7)== 1,'red','white')}" onclick="updatePop('{!TEXT(ins.Hdate)}', '{!job.jobId}'); return false">{!ins.install}</td>
+                            </apex:repeat>
+                        </tr>
+                        
+                    </apex:repeat>
+            </table>
+       
+       <div id="pdDiv" title="Edit Details">
+           <apex:outputPanel id="xyz">
+           <table>
+               <apex:repeat value="{!updateList}" var="up">
+                   <tr>
+                       <td><apex:inputField rendered="{!if(up.Drawing_Date__c == null,false,true)}" value="{!up.Drawing_Date__c}"/></td>
+                       <td><apex:inputField rendered="{!if(up.Production_Date__c == null,false,true)}" value="{!up.Production_Date__c}"/></td>
+                       <td><apex:inputField rendered="{!if(up.Install_Date__c == null,false,true)}" value="{!up.Install_Date__c}"/></td>
+                   </tr>
+               </apex:repeat>
+           </table>
+           <center><apex:commandButton value="Update"/><apex:commandButton value="Cancel" onclick="divClose(); return false" action="{!clear}" reRender="xyz"/></center>
+           </apex:outputPanel>
+       </div>
+       
+    </apex:form>
+    
+    
+</apex:page>

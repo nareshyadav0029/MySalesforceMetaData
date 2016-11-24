@@ -1,0 +1,179 @@
+<apex:page id="pg" controller="scheduleController" standardStylesheets="true" tabStyle="ApexClass">
+    <apex:includeScript value="{!$Resource.JQuery}"/>
+
+    <style type="text/css">
+        .sname{
+            margin-left: 10px;
+        }
+        .requiredBlock {
+            margin-left: 10px;
+        }
+        .d{
+            margin-left:10px;
+        }.daylist{
+            margin-left:5px;
+        }
+        .granRight {
+            line-height: 230%;
+            padding-bottom: 10px;
+            padding-left: 8px;
+            padding-top: 10px;
+            white-space: nowrap;
+            width: auto;
+        }
+        .granLeft {
+            padding-right: 13px;
+            padding-top: 10px;
+            white-space: nowrap;
+            width: 5%;
+        }
+    </style>
+
+
+    <apex:form id="frm">
+    
+    <script>
+        function openPopUpWindow(){
+            var newWin = null;
+            var url="/apex/ApexClassLookUp";       
+            window.open(url , 'LookUp' ,'width=400,height=650');  
+        }
+        function mustfield(){
+            if($(".sname").val() == '' && $(".d").val() == ''){
+                document.getElementById("error").innerHTML="Error:you must enter a value. ";
+            }
+            savevalue();
+        }
+        $(document).ready(function(){
+            $("#monthly").hide();
+            $("input[name$='mw']").click(function(){
+                var radio_value = $(this).val();
+                if(radio_value=='week'){
+                    $("#weekly").show();
+                    $("#monthly").hide();
+                }else if(radio_value=='month'){
+                    $("#monthly").show();
+                    $("#weekly").hide();
+                }
+            });
+            $('.weekdaylist').attr('disabled', true);
+            $('.weekdaylist').attr('disabled', true);
+            $("input[name$='dd']").click(function(){
+                var radio_value = $(this).val();
+                if(radio_value=='day'){
+                    $('.weekdaylist').attr('disabled', true);
+                    $('.weekdaylist').attr('disabled', true);
+                    $('.daylist').attr('disabled', false);
+                }else if(radio_value=='weekday'){
+                    $('.daylist').attr('disabled', true);
+                    $('.weekdaylist').attr('disabled', false);
+                    $('.weekdaylist').attr('disabled', false);
+                }
+            });
+        });
+               
+    </script>
+    
+    <apex:actionFunction name="savevalue" action="{!saveweek}" reRender="frm"/>
+    <apex:inputHidden value="{!classId}" id="cId"/>
+        <apex:pageBlock id="pgblk">
+        <apex:pageBlockButtons >
+            <apex:commandButton value="Save" onclick="mustfield(); return false;"/>
+            <apex:commandButton value="Cancel"/>
+        </apex:pageBlockButtons>
+        <apex:pageMessages ></apex:pageMessages>
+        
+        <table style="margin-left: 40px">
+            <tr>
+                <td style="text-align:end">Job Name</td>
+                <td>
+                    <apex:outputPanel >
+                        <div class="requiredInput">
+                        <div class="requiredBlock"></div>
+                            <apex:inputText id="intext"  value="{!jobName}" required="true" styleClass="sname"/>
+                        </div>
+                        <span id="error" value="Error" style="color:red;"></span>
+                    </apex:outputPanel>
+                </td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td style="text-align:end">Apex Class</td>
+                <td style="display: flex;"><apex:inputField id="classname" value="{!classObj.Name}" styleClass="sname"/> <img src="/s.gif" class="lookupIcon" onclick="openPopUpWindow(); return false;" style="cursor:pointer;"/></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Schedule Apex Execution</td>
+                <td colspan="3">
+                    <div class="sname" style="width: 155%;border: 1px solid rgb(221, 221, 221);background-color: rgb(238, 238, 238);">
+                        <table>
+                            <tr>
+                                <td style="padding-top: 10px;text-align:end;">Frequency</td>
+                                <td id="granLeft0" class="granLeft">
+                                    <input id="week" type="radio" value="week" name="mw" checked="checked"/>Weekly <br/>
+                                    <input id="month" type="radio" value="month" name="mw"/>Monthly
+                                    
+                                </td>
+                                <td id="granRight0" class="granRight">
+                                    <div id="weekly" class="weekly" style="background-color: rgb(255, 255, 255);border: 1px solid rgb(204, 204, 204);float: left;padding: 5px;white-space: nowrap;">
+                                        Recurs every week on
+                                        <br/>
+                                        <apex:selectCheckboxes layout="pageDirection" value="{!selectedWeek}">
+                                            <apex:selectOptions value="{!WeekList}"/>
+                                        </apex:selectCheckboxes>
+                                    </div>
+                                    
+                                    <div id="monthly" style="background-color: rgb(255, 255, 255);border: 1px solid rgb(204, 204, 204);float: left;padding: 5px;white-space: nowrap;width:95%">
+                                        <div id="dayDiv" style="float: left">
+                                            <input id="day" type="radio" value="day" name="dd" checked="checked"/>On Day
+                                            <apex:selectList value="{!selectedDay}" size="1" multiselect="false" styleClass="daylist" id="dayofmonth">
+                                                <apex:selectOptions value="{!dayList}"/>
+                                            </apex:selectList>
+                                            of every month
+                                        </div>
+                                        
+                                        <div id="weekdayDiv">
+                                            <input id="weekday" type="radio" value="weekday" name="dd"/>On Day
+                                            <apex:selectList value="{!selectedweekDay}" size="1" multiselect="false" styleClass="weekdaylist" id="monthday">
+                                                <apex:selectOptions value="{!weekdayList}"/>
+                                            </apex:selectList>
+                                            <apex:selectList value="{!selectedweekName}" size="1" multiselect="false" styleClass="weekdaylist" id="monthweek">
+                                                <apex:selectOptions value="{!weeknameList}"/>
+                                            </apex:selectList>
+                                            of every month
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: right;">Start</td>
+                                <td colspan="2"><apex:inputField value="{!conObj.Birthdate}" required="true" styleClass="d"/></td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: right;">End</td>
+                                <td colspan="2"><apex:inputField value="{!oppObj.CloseDate}" required="true" styleClass="d"/></td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: end">Preferred Start Time</td>
+                                <td colspan="2">
+                                    <apex:outputPanel >
+                                        <div class="requiredInput">
+                                            <div class="requiredBlock"></div>                                                  
+                                            <apex:selectList value="{!selectedTime}" size="1" multiselect="false" styleClass="d">
+                                                <apex:selectOptions value="{!hoursList}"/>
+                                            </apex:selectList>
+                                        </div>
+                                        <span id="error" value="Error" style="color:red;"></span>
+                                    </apex:outputPanel>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

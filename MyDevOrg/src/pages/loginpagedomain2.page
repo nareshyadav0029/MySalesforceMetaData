@@ -1,0 +1,16 @@
+<apex:page >
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+   <script src="{!$resource.postmessage}" type="text/javascript"/>
+   <script src="{!$resource.post}"/>
+   <script type="text/javascript">       
+       $.receiveMessage( function(e){ 
+       alert('method called'); 
+        if(e.data=='1'){
+            document.getElementById('lgbtn').disabled=true;
+        }}, 'https://webisite-developer-edition.ap1.force.com' );                                    
+   </script>  
+  <body >
+      <iframe id="myframe" src ="https://webisite-developer-edition.ap1.force.com" /> 
+      <input id="lgbtn" type="button" value="Submit"/>
+  </body>
+</apex:page>

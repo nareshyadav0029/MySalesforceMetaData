@@ -1,0 +1,13 @@
+<apex:page controller="Assign6XmlController" tabStyle="Class__c">
+<apex:sectionHeader title="Contacts" subtitle="From Mufiz Sir's Org"/>
+    <table class="list">
+    <apex:repeat value="{!modalx}" var="modal">
+        <tr>
+            <td>{!modal.s_no}</td>
+            <td>{!modal.name}</td>
+            <td>{!modal.phone}</td>
+            <td>{!modal.website}</td>
+        </tr>
+    </apex:repeat>  
+    </table>
+</apex:page>

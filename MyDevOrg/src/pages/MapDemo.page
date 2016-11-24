@@ -1,0 +1,11 @@
+<apex:page controller="MapDemoController">
+    <apex:pageBlock >
+        <apex:pageBlockSection >
+            <apex:pageBlockTable value="{!conmap}" var="con">
+                <apex:repeat value="{!con}" var="demo">
+                    <apex:column value="{!demo}"/>
+                </apex:repeat>
+            </apex:pageBlockTable>
+        </apex:pageBlockSection>
+    </apex:pageBlock>
+</apex:page>

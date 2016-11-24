@@ -1,0 +1,113 @@
+<apex:page standardController="Job_Post__c" standardStylesheets="false" showHeader="false">
+
+    <style type="text/css">
+        @import "{!URLFOR($Resource.BootstrapNew,'css/bootstrap.min.css')}";
+    </style>
+    <script src="{!$Resource.JQuery}"></script>
+    
+    <style>
+        .skillstyle{
+            margin-right:5px;
+            width: 25% !important;
+            cursor: default !important;
+        }
+        .jobrow{
+            background:#008B8B;
+            color:white;
+        }
+        .jarow{
+            background:#FFDEAD
+        }
+    </style>
+    
+    <script>
+        $( document ).ready(function() { 
+         
+            //  This is for job application skill.
+            var jobArray = $('.jobskill').text();
+            $('.skill').each(function(){ 
+                var jobAppArray = $(this).text();
+                var sethtml='';
+                
+                jobAppArray = $(this).text().split(' ');
+                jobAppArray.sort(function(a, b) {
+                   var compA = $(a).text().toUpperCase();
+                   var compB = $(b).text().toUpperCase();
+                   return (compA < compB) ? -1 : (compA > compB) ? 0 : 1;
+                })
+                for(var i = 0 ;i<jobAppArray.length ;i++){                    
+                    if(jobArray.indexOf(jobAppArray[i]) != -1){
+                        sethtml+="<div class='btn btn-success skillstyle'>"+jobAppArray[i]+"</div>";
+                    }else{
+                        sethtml+="<div class='btn btn-warning skillstyle'>"+jobAppArray[i]+"</div>";
+                    }
+                }
+                tempArray = jobArray.split(',')
+                for(var i = 0 ;i<tempArray.length ;i++){                    
+                    if(jobAppArray.indexOf(tempArray[i]) == -1){
+                        sethtml+="<div class='btn btn-danger skillstyle'>"+tempArray[i]+"</div>";
+                    }
+                }
+                $(this).html(sethtml);
+            });
+            
+            //////////////////////////////////    End      //////////////////////////////////////////////////
+            
+            //  This is for job application domain.
+            var jobDomainArray = $('.jobdomain').text();
+            $('.domain').each(function(){ 
+                var jobAppDomainArray = $(this).text();
+                var sethtml='';
+                
+                jobAppDomainArray = $(this).text().split(' ');
+                for(var i = 0 ;i<jobAppDomainArray.length ;i++){                    
+                    if(jobDomainArray.indexOf(jobAppDomainArray[i]) != -1){
+                        sethtml+="<div class='btn btn-success skillstyle'>"+jobAppDomainArray[i]+"</div>";
+                    }else{
+                        sethtml+="<div class='btn btn-warning skillstyle'>"+jobAppDomainArray[i]+"</div>";
+                    }
+                }
+                tempArray = jobDomainArray.split(',')
+                for(var i = 0 ;i<tempArray.length ;i++){                    
+                    if(jobAppDomainArray.indexOf(tempArray[i]) == -1){
+                        sethtml+="<div class='btn btn-danger skillstyle'>"+tempArray[i]+"</div>";
+                    }
+                }
+                $(this).html(sethtml);
+            });
+            
+            //////////////////////////////////    End      //////////////////////////////////////////////////
+            
+        });
+    </script>
+
+    <table class="table table-condensed table-bordered">
+        <tr class="jobrow">
+            <th>Job : {!Job_Post__c.Name}</th>
+            <th>Qual : <span class="jobskill">{!SUBSTITUTE(Job_Post__c.Skills_Required__c, ';', ',')}</span></th>
+            <th>Exp : {!Job_Post__c.Experience__c}</th>
+            <th>Domain : <span class="jobdomain">{!SUBSTITUTE(Job_Post__c.Domain__c, ';',',')}</span></th>
+            <th>Score </th>
+        </tr>
+        <tr>
+            <td></td>
+        </tr>
+        <tr class="jarow">
+            <th>Resource Name</th>
+            <th>Qualification</th>
+            <th>Experience</th>
+            <th>Domain</th>
+            <th>Score</th>
+        </tr>
+        <apex:repeat value="{!Job_Post__c.Job_Applications__r}" var="ja">
+            <tr>
+                <td>{!ja.Applicant__r.Name}</td>
+                <td class="skill">{!SUBSTITUTE(ja.Skill__c, ";"," ")}</td>
+                <td>{!ja.Experience__c}</td>
+                <td class="domain">{!SUBSTITUTE(ja.Domain__c, ';', ' ')}</td>
+                <td></td>
+            </tr>
+        </apex:repeat>
+    </table>
+    
+</apex:page>

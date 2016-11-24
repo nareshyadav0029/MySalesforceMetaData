@@ -1,0 +1,210 @@
+<apex:page controller="TimetrackingController" tabStyle="User" standardStylesheets="false" sidebar="false">
+    <apex:includeScript value="{!URLFOR($Resource.JqueryDialogBox,'jQueryDialog/jQueryDialog/jquery-1.9.1.js')}"/>
+    <apex:includeScript value="{!URLFOR($Resource.JqueryDialogBox,'jQueryDialog/jQueryDialog/jquery-ui.js')}"/>
+    <apex:stylesheet value="{!URLFOR($Resource.JqueryDialogBox,'jQueryDialog/jQueryDialog/jquery-ui.css')}"/>
+    <apex:includeScript value="{!$Resource.Bootstrap}"/>    
+         <style type="text/css">
+             @import "{!$Resource.BootstrapCss}";
+        </style> 
+        
+     <script>
+         $(document).ready(function(){             
+              var dlg = $("#pdDiv").dialog({
+                    width:250,
+                    height:160,
+                    modal:true,
+                    resizable: false,
+                    autoOpen: false,
+              });
+        
+         });
+         
+     function divOpen() {
+         
+         $("#pdDiv").dialog("open");
+     }        
+     </script>
+         
+        <style>
+            .ui-dialog-titlebar {
+                display: none;   
+            }
+            .container{
+                width:1000px;
+                padding-left: 180px;
+            }
+            .button-group {                
+                height: 80px;
+                width: 750px;
+                margin-left: 60px;
+                text-align: center;
+            }
+            
+            #heading{
+                color:#4682B4;
+                font-size: 60px;
+                margin-left: 325px;
+                font-family: Times New Roman;
+            }
+            body .btn{
+                background:Red;
+                height:50px;
+                width:100px;
+                color:white;
+                font-family: Times New Roman;
+                font-size: 20px;
+                border:1px solid Red;
+                border-radius:5px;
+                margin-left: 150px;
+                margin-top:30px;
+            }
+            body .btn:hover{
+                color:Red;
+                background:white;
+            }
+            form{
+                margin: 0 0 0 100px;
+                padding: 0;
+            }
+            #mytable th {
+                color: grey;
+                font-family: Times New Roman;
+                font-size: 20px;
+                font-weight: 900;
+                text-align: -moz-center;
+            }
+            select[multiple], select[size] {
+                border: 1px solid gainsboro;
+                background: none repeat scroll 0 0 wheat;
+                border-radius: 5px;
+                height: 50px;
+                width: 315px;
+                margin-bottom: 20px;
+                margin-left: 20px;
+                margin-top: 20px;
+                text-align: center;
+                font-size: 25px;
+                color: steelblue;
+                font-family: Times New Roman;
+            }
+            .head{
+                color: steelblue;
+                margin-left: 430px;
+                width: 150px;
+                font-family: Times New Roman;
+                text-align: -moz-center;
+            }
+            .ui-dialog .ui-dialog-content {
+                padding:0px;
+            }
+            #btn {
+                background: none repeat scroll 0 0 red;
+                border: 1px solid red;
+                color: white;
+                height: 45px;
+                margin-top: 75px;
+                width: 240px;
+            }
+            #dialog-content {
+                color: steelblue;
+                font-family: Tahoma;
+                font-size: 25px;
+                font-weight: bolder;
+                margin-left: 40px;
+            }
+        </style>
+      
+    <apex:form id="frm">
+    
+        <apex:actionStatus id="picklist" startText=""/>
+        <apex:actionFunction status="picklist" name="fill" action="{!filllist}" reRender="frm"/>
+        
+        <apex:actionFunction status="picklist" name="okey" action="{!startProject}"/>
+        
+        
+            <h1 id="heading">Time Tracking</h1>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            
+            <apex:outputPanel rendered="{!flag}">
+            <div class="head">
+                <h2>Start Task</h2>
+            </div>
+                <div class="container">
+                    <table id="mytable">
+                    <tr>
+                        <th>Employee</th>
+                        <td>
+                            <apex:selectList size="1" value="{!selected_user}" onchange="fill(); return false;" multiselect="false" styleClass="picklist">
+                                <apex:selectOptions value="{!selectuser}"/>
+                            </apex:selectList>
+                        </td>
+                    </tr>
+    
+                    <tr>
+                        <th>Project</th>
+                        <td>
+                            <apex:selectList size="1" value="{!selected_project}" onchange="fill(); return false;" multiselect="false" styleClass="picklist">
+                                <apex:selectOptions value="{!selectproject}"/>
+                            </apex:selectList>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <th>Task</th>
+                        <td>
+                            <apex:selectList size="1" value="{!selected_task}" onchange="fill(); return false;" multiselect="false" styleClass="picklist">
+                                <apex:selectOptions value="{!selecttask}"/>
+                            </apex:selectList>
+                        </td>
+                    </tr>
+                </table>
+                </div>
+            </apex:outputPanel>
+            
+            <apex:outputPanel rendered="{!flag}">
+                <div class="button-group">
+                    <apex:commandButton value="Start Task" onclick="divOpen(); return false" reRender="frm"/>
+                    <apex:commandButton value="Cancel" action="{!cancel}"/>
+                </div>
+            </apex:outputPanel>
+            
+            <apex:outputPanel rendered="{!stop_flag}">
+                <div class="container">
+                    <table id="mytable">
+                        <tr>
+                            <th>Employee</th>
+                            <td>
+                                <apex:selectList size="1" value="{!selected_user}" onchange="fill(); return false;" multiselect="false" styleClass="picklist">
+                                    <apex:selectOptions value="{!selectuser}"/>
+                                </apex:selectList>
+                            </td>
+                        </tr>
+                   </table>
+               </div>
+            </apex:outputPanel>
+            
+            <apex:outputPanel rendered="{!stop_flag}">
+                <div class="button-group">
+                    <apex:commandButton value="Next"/>
+                    <apex:commandButton value="Cancel" action="{!cancel}"/>
+                </div>
+            </apex:outputPanel>
+            
+            <apex:outputPanel rendered="{!flag1}">
+                <div class="button-group">
+                    <apex:commandButton value="Start Task" action="{!starttask}" reRender="frm"/>
+                    <apex:commandButton value="Stop Task" action="{!stoptask}" reRender="frm"/>
+                </div>
+            </apex:outputPanel>
+               
+    </apex:form>
+      
+        <div id="pdDiv">
+            <h3 id="dialog-content">Task Started</h3>
+            <button id="btn" onclick="okey(); return false;" >OK</button>
+        </div>
+
+</apex:page>

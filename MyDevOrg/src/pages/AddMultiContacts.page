@@ -1,0 +1,33 @@
+<apex:page controller="AddMultiContactsController" tabStyle="Student__c" sidebar="false" >
+    <apex:form id="table">
+        <apex:pageBlock >
+        <apex:pageMessage severity="error">
+        </apex:pageMessage>
+            <apex:param assignTo="{!RowNum}" name="RowNum" value="{!RowNum}"/>
+            <apex:pageBlockSection columns="1" title="Add Contacts">
+                <apex:pageBlockTable value="{!contactmodel}" var="cm">
+                    <apex:column headerValue="First Name">
+                        <apex:inputText value="{!cm.contact.Firstname}"/>
+                    </apex:column>
+                    <apex:column headerValue="Last Name">
+                        <apex:inputText value="{!cm.contact.Lastname}"/>
+                    </apex:column>
+                    <apex:column headerValue="Email">
+                        <apex:inputText value="{!cm.contact.Email}"/>
+                    </apex:column>
+                    <apex:column headerValue="Phone">
+                        <apex:inputText value="{!cm.contact.Phone}"/>
+                    </apex:column>
+                    <apex:column headerValue="Delete">
+                        <apex:commandButton value="Delete" action="{!DelRow}"/>
+                    </apex:column>
+                </apex:pageBlockTable>
+            </apex:pageBlockSection>
+                <apex:pageBlockButtons location="top">
+                    <apex:commandButton value="Add Row" action="{!AddRow}"/>
+                    <apex:commandButton value="Save" action="{!Save}"/>
+                    <apex:commandButton value="Cancel"/>
+                </apex:pageBlockButtons>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

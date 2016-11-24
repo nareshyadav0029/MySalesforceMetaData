@@ -1,0 +1,30 @@
+<apex:page controller="Ass7AllSObjectsController" tabStyle="Class__c">
+<apex:sectionHeader Title="Add {!selected_object}" subtitle="Insert"/>
+<apex:form >
+    <apex:pageBlock >
+        <table class="list">
+            <tr>
+                <th> Field Name </th>
+                <th> Field Value </th>
+            </tr>
+            
+            <apex:repeat value="{!mclass}" var="modal">
+                <tr>
+                    <td>{!modal.label}</td>
+                    <td><apex:inputField value="{!obj[modal.name]}"/></td>
+                </tr>
+            </apex:repeat>
+            
+            <apex:repeat value="{!allf}" var="all">
+                <tr>
+                    <td>{!all.label}</td>
+                    <td><apex:inputField value="{!obj[all.selected_field]}"/></td>
+                </tr>
+            </apex:repeat>
+
+        </table>
+        <hr/>
+        <apex:commandButton value="Save" action="{!Save}"/>
+    </apex:pageBlock>
+</apex:form>
+</apex:page>

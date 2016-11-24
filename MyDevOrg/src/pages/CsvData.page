@@ -1,0 +1,22 @@
+<apex:page controller="CsvDataController" tabStyle="Staging__c">
+<apex:sectionHeader title="Upload" subtitle="CSV File Uploader"/>
+  
+<apex:form >
+    
+    <apex:pageMessages ></apex:pageMessages>
+    
+
+<apex:pageBlock id="Rend">
+    <apex:pageBlockSection >
+        <apex:inputFile fileName="{!attach.Name}" value="{!attach.Body}" contentType="{!attach.contentType}"/>
+     </apex:pageBlockSection>
+     <apex:pageBlockSection >     
+        <apex:commandButton value="Upload" action="{!upload}"/>
+     </apex:pageBlockSection>
+     <apex:pageBlockSection >     
+        <apex:commandButton value="Process Existing Records" action="{!process}"/>
+     </apex:pageBlockSection>   
+</apex:pageBlock>
+</apex:form>
+            <apex:enhancedList type="Staging__c" customizable="false" rowsPerPage="25" height="300"/>
+</apex:page>

@@ -1,0 +1,154 @@
+<apex:page id="pg" controller="searchAccContactPagination_sendmailcont" action="{!getIdsFromUrl}" sidebar="false" showHeader="false">
+
+    <style type="text/css">
+        .txtto{
+            color: gray;
+            font-size: 20px;
+        }
+        .tosub{
+            background: none repeat scroll 0 0 wheat;
+            color: graytext;
+            font-size: 15px;
+            font-weight: bolder;
+            height: 25px;
+            margin-left: 15px;
+            width: 250px;
+        }
+        .txtsub{
+            color: gray;
+            font-size: 20px;
+        }
+        .txtemail{
+            color: gray;
+            font-size: 20px;
+        }
+        .send{
+            background: none repeat scroll 0 0 wheat !important;
+            color: graytext !important;
+            font-family: Tahoma !important;
+            font-weight: bolder !important;
+            height: 30px;
+            margin-left: 116px !important;
+            width: 75px;
+        }
+        .attach{
+            background: none repeat scroll 0 0 wheat !important;
+            color: graytext !important;
+            font-family: Tahoma !important;
+            font-weight: bolder !important;
+            height: 30px;
+            width: 75px;
+        }
+        .can{
+            background: none repeat scroll 0 0 wheat !important;
+            color: graytext !important;
+            font-family: Tahoma !important;
+            font-weight: bolder !important;
+            height: 30px;
+            width: 75px;
+        }
+        .send:hover{
+            background: green !important;
+            color: white !important;
+        }
+        .attach:hover{
+            background: #00CED1 !important;
+            color: white !important;
+        }
+        .can:hover{
+            background: Red !important;
+            color: white !important;
+        }
+        .popupback{
+            background-color:gray !important;
+            opacity: 0.70 !important;
+            filter: alpha(opacity = 70) !important;
+            position: absolute !important;
+            width: 100% !important;
+            height: 100% !important;
+            top: 0 !important;
+            left: 0 !important;
+            z-index: 9998 !important;
+        }
+        .popup{
+            background-color: white !important;
+            border-width: 0px !important;
+            border-radius:10px !important;
+            height:60px;
+            width:180px;
+            z-index: 9999 !important;
+            left: 50% !important;
+            padding:20px !important;
+            position: absolute !important;
+            /* These are the 3 css properties you will need to change so the popup 
+            displays in the center of the screen. First set the width. Then set 
+            margin-left to negative half of what the width is. You can add 
+            the height property for a fixed size pop up if you want.*/
+            margin-left: -100px !important;
+            top:40% !important;    
+        }
+    </style>
+    
+    <script type="text/javascript">
+        function openPopUpWindow(atturl){       
+            window.open(atturl , 'SendAttachment' ,'width=650,height=550');
+        }
+    </script>
+
+    <apex:form id="form">
+    <apex:inputHidden value="{!att_name}" id="attid"/>
+    <apex:actionStatus id="mail">
+        <apex:facet name="start">
+            <apex:outputPanel styleClass="popupback">
+                <apex:image value="{!$Resource.SendMail}" styleClass="popup"/>
+            </apex:outputPanel>
+        </apex:facet>
+    </apex:actionStatus>     
+    <apex:actionFunction status="mail" name="send" action="{!Send_Email}" oncomplete="window.opener.location.reload(),window.close(); return false"/>
+    
+    <apex:actionStatus id="attach">
+        <apex:facet name="start">
+            <apex:outputPanel styleClass="popupback">
+                <apex:image value="{!$Resource.Process}" styleClass="popup"/>
+            </apex:outputPanel>
+        </apex:facet>
+    </apex:actionStatus>
+    <apex:actionFunction status="attach" name="get" action="{!getattachid}" oncomplete="openPopUpWindow('{!attach_url}'); return false;" /> 
+     
+    <apex:actionFunction name="callme" action="{!dummy}" reRender="refresh">
+    </apex:actionFunction> 
+     
+        <table align="center">
+            <apex:repeat value="{!con_to}" var="con">
+                <tr>
+                    <td align="right"><apex:outputLabel value="To" styleClass="txtto"/></td>
+                    <td><apex:inputText html-placeholder="{!con.name}" styleClass="tosub"/> </td>
+                </tr>
+            </apex:repeat>
+                <tr>
+                    <td align="right"><apex:outputLabel value="Subject" styleClass="txtsub"/></td>
+                    <td> <apex:inputText value="{!subject}" html-placeholder="Enter Subject" styleClass="tosub"/> </td>
+                </tr>
+                <tr>
+                    <td align="right"><apex:outputLabel value="Email" styleClass="txtemail"/></td>
+                    <td> <apex:inputTextarea value="{!email_body}" richText="true" html-placeholder="Enter Message you want to send"/> </td>
+                </tr>
+                <tr>
+                    <apex:pageBlock >
+                        <apex:pageBlockButtons location="Bottom">
+                            <apex:commandButton value="Sendmail" onclick="send(); return false" styleClass="send"/>
+                            <apex:commandButton value="Attachment" onclick="get(); return false"  styleClass="attach"/>
+                            <apex:commandButton value="Cancel" onclick=" window.close();" styleClass="can"/>
+                        </apex:pageBlockButtons>
+                    </apex:pageBlock>
+                </tr>
+            </table>
+            <apex:pageBlock id="refresh" title="Attachments">
+                <apex:outputPanel id="refresh">
+                       <apex:repeat value="{!attach_name}" var="att">
+                           <td>{!att.name}</td>
+                       </apex:repeat>
+                </apex:outputPanel>
+            </apex:pageBlock>
+    </apex:form>
+</apex:page>

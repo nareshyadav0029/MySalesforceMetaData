@@ -1,0 +1,15 @@
+<apex:page standardController="Contact" recordSetVar="contacts">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous"/>
+    <apex:includeScript value="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"/>
+    <div class="container">
+        <div class="row">
+            <ul class="list-group">
+                <apex:repeat value="{! contacts }" var="c">
+                    <li class="list-group-item">{!c.Name}</li>
+                </apex:repeat>
+            </ul>
+        </div>
+    </div>
+    
+</apex:page>

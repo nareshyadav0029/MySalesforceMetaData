@@ -1,0 +1,45 @@
+<apex:page id="pg" controller="CustomEmailTemplateController" sidebar="false">
+<apex:includeScript value="{!$Resource.JQuery}"/>
+<script>
+  $(document).ready(function(){
+      $('[id$=btn]').click(function(){
+         var msg = '';
+         var i = 1;
+         $('[id$=checkbox]').each(function(){
+             if($(this).is(":checked")){
+                 var email = $(this).parent().parent().find('[id$=email]').text();
+                 if(i == 1 && email.trim().length>0){
+                     msg += email;
+                 }
+                 if( (i != 1) && email.trim().length>0)    {
+                     msg += ', '+email;
+                 }
+                 i++;
+             }
+         });
+         CompleteTask(msg);
+      });
+  });
+  
+  function CompleteTask(emails){
+      window.opener.document.getElementById("pg:frm:pgblk:add").value = emails;
+      window.close();
+  }
+</script>    
+    <apex:form id="frm">
+        <apex:pageBlock id="pgblk">
+            <apex:pageBlockButtons location="both">
+                 <apex:commandButton value="Add" id="btn"/>
+            </apex:pageBlockButtons>
+            <apex:pageBlockSection id="pgsec" columns="1">
+                <apex:pageBlockTable id="pgtbl" value="{!con_list}" var="con">
+                    <apex:column >
+                        <apex:inputCheckbox id="checkbox"/>
+                    </apex:column>
+                    <apex:column value="{!con.name}"/>
+                    <apex:column id="email" value="{!con.email}"/>
+                </apex:pageBlockTable>
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

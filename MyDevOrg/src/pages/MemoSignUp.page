@@ -1,0 +1,2 @@
+<apex:page controller="MemosManagerController" sidebar="false" tabStyle="Class__c">
+</apex:page>

@@ -1,0 +1,118 @@
+<apex:page controller="AttachmentManagerController" tabStyle="Class__c" standardStylesheets="false">
+<apex:sectionHeader title="AttachmentManager" subtitle="Show Detail"/>
+
+         <apex:includeScript value="{!$Resource.JQuery}"/>
+         <apex:includeScript value="{!$Resource.Bootstrap}"/>
+            
+         <style type="text/css">
+             @import "{!$Resource.BootstrapCss}";
+        </style>
+
+    <script>
+        function del(attid){
+            if(confirm("Are You Sure ?") == true){
+                DelAtt(attid);
+            }
+        }
+        
+        function openPopUpWindow(aid){       
+            window.open("https://c.ap1.visual.force.com/apex/AttachmentManager2?id="+aid,'','width=800,height=400');
+        }
+        
+    </script>
+    
+    <style>
+        .Del{
+            border-color:#FFFFFF !important;
+        }
+        .Del:hover{
+            background:#FF0000;
+            color:#FFFFFF;
+        }
+        .copy{
+            border-color:#FFFFFF !important;
+        }
+        .copy:hover{
+            background:#00BFFF;
+            color:#FFFFFF;
+        }
+        .view{
+            border-color:#FFFFFF !important;
+        }
+        .view:hover{
+            background:#B0C4DE;
+            color:#FFFFFF;
+        }
+        .pbt{
+            background-color:#F0FFF0 !important;
+        }
+        .pbc:hover{
+            background:#BC8F8F !important;
+        }
+        
+        .modal-body{
+                background-color:#9ACD32;
+            }
+            .modal-header{
+                background-color:#6B8E23;
+            }
+            .modal-footer{
+                background-color:#6B8E23;
+            }
+            .modal-title{
+                color:#FFFF00;
+            }
+            .btn_close{
+                height:28px;
+                width:50px;
+                border-color:#6B8E23;
+            }
+            .btn_close:hover{
+                background:#FF0000;
+                color:#FFFFFF;
+            }
+        
+    </style>
+
+    <apex:form id="form">
+    
+        <apex:pageBlock id="Rend">
+        
+        <apex:actionStatus id="Delete" startText="Deleting Attachment" />
+        <apex:actionFunction status="Delete" name="DelAtt" action="{!DeleteAtt}" reRender="Rend">
+            <apex:param assignTo="{!attid}" name="attid" value=""/>
+        </apex:actionFunction>
+        
+        <apex:actionStatus id="Search" startText="Searching Attachment"/>
+        <apex:actionFunction status="Search" name="search" action="{!Search}" reRender="Rend"/>
+        
+        <apex:pageBlockSection title="Filter Attachment">
+            <apex:selectList value="{!selected_obj}" size="1" multiselect="false" onchange="search(); return false;">
+                <apex:selectOptions value="{!selectobj}"/>
+            </apex:selectList>
+        </apex:pageBlockSection>
+
+            <apex:pageBlockSection columns="1" title="All Attachment">
+                <apex:pageBlockTable value="{!mtype}" var="matt" styleClass="pbt">
+                    <apex:column >
+                        <img src="{!URLFOR($Resource.FileTypes,matt.imgurl)}" alt="No Image"/>
+                    </apex:column>
+                    <apex:column headerValue="Name" value="{!matt.atach.name}" styleClass="pbc"/>
+                    <apex:column headerValue="Type" value="{!matt.atach.contenttype}" styleClass="pbc"/>
+                    <apex:column headerValue="Size" value="{!matt.atach.bodylength}" styleClass="pbc"/>
+                    <apex:column headerValue="Copy To" styleClass="pbc">
+                    <a data-toggle="modal" data-target="#myModal">
+                        <apex:commandButton value="CopyTo" onclick="openPopUpWindow('{!matt.atach.id}')" styleClass="copy" />
+                     </a>
+                    </apex:column>
+                    <apex:column headerValue="Delete Attachment" styleClass="pbc">
+                        <apex:commandButton value="Delete" onclick="del('{!matt.atach.id}'); return false;" styleClass="Del"/>
+                    </apex:column>
+                    <apex:column headerValue="View Attachment" styleClass="pbc">
+                        <apex:commandButton value="View" action="/servlet/servlet.FileDownload?file={!matt.atach.id}" styleClass="view"/>
+                    </apex:column>
+                </apex:pageBlockTable>
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

@@ -1,0 +1,25 @@
+<apex:page controller="Ass5AccConController" sidebar="false" standardStylesheets="false" applyHtmlTag="true">
+<apex:form >
+<apex:pageBlock id="table">
+    <apex:actionStatus id="status" startText="Matching Contact"/>
+    <apex:actionFunction status="status" action="{!Check}" name="Match" reRender="table">
+    <apex:param assignTo="{!getid}" name="getid" value=""/>
+    </apex:actionFunction>
+        <table class="list">
+            <apex:repeat value="{!Confields}" var="Con">
+                <tr>
+                    <apex:repeat value="{!Con}" var="con" >
+                        <td><b>{!con}</b></td>
+                    </apex:repeat>
+                </tr>
+            </apex:repeat>
+                <tr>
+                    <td><b>Match</b></td>
+                    <apex:repeat value="{!btnmatch}" var="btn">
+                        <td><apex:commandButton value="Matched" onclick="Match('{!btn}'); return false;"/></td>
+                    </apex:repeat>
+                </tr>
+        </table>
+</apex:pageBlock>
+</apex:form>
+</apex:page>

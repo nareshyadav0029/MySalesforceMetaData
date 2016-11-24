@@ -1,0 +1,100 @@
+<apex:page controller="LeadListController" tabStyle="Lead">
+<apex:sectionHeader title="Lead" subtitle="Lead List"/>
+
+<apex:form id="pgform">
+    <table align="right">
+        <tr>
+            <apex:repeat value="{!alphabets}" var="alpha">
+                <td>
+                     <apex:commandLink rendered="{!alphabetfilter != alpha}"  action="{!sortData}" styleClass="listItem"  reRender="pgform"  status="filter">
+                          <span class="listItemPad">{!alpha}</span>
+                          <apex:param value="{!alpha}" name="alphabetfilter" assignTo="{!alphabetFilter}" />
+                     </apex:commandLink>
+                     <apex:commandLink rendered="{!alphabetfilter == alpha}" style="background-color: #C6E1FF;" action="{!sortData}" styleClass="listItem"  reRender="pgform"  status="filter">
+                          <span class="listItemPad">{!alpha}</span>
+                          <apex:param value="{!alpha}" name="alphabetfilter" assignTo="{!alphabetFilter}" />
+                     </apex:commandLink>
+                     
+                </td>
+            </apex:repeat>
+         </tr>
+     </table>
+  <apex:pageBlock id="pgblok">
+      <apex:actionStatus startStyle="color:blue; font-weight:bold;" startText="Processing..." id="st1"/>
+      <apex:actionStatus startStyle="color:brown; font-weight:bold;" starttext="Sorting..." id="sort"/>
+      <apex:actionStatus startStyle="color:green; font-weight:bold;" startText="Filtering..." id="filter"/>
+      <apex:pageBlockTable styleClass="datatable" value="{!leads}" var="lead" id="rendTable">
+          <apex:column headerValue="Owner Name">
+              <apex:outputField value="{!lead.ownerId}">
+                <apex:inlineEditSupport hideOnEdit="editButton" event="ondblclick"
+                changedStyleClass="myBoldClass" resetFunction="resetInlineEdit"/>
+               </apex:outputField>
+          </apex:column>
+          <apex:column headervalue="Company">
+               <apex:facet name="header">
+                     <apex:commandLink style="color:black;" action="{!sortData}" value="Company {!IF(fieldToSort=='Company',IF(orderflag==true,'?','?'),'')}" reRender="rendTable"  status="sort">
+                          <apex:param value="Company" name="column" assignTo="{!fieldToSort}" />
+                     </apex:commandLink>
+               </apex:facet>
+              <apex:outputField value="{!lead.company}">
+                <apex:inlineEditSupport hideOnEdit="editButton" event="ondblclick"
+                changedStyleClass="myBoldClass" resetFunction="resetInlineEdit"/>
+               </apex:outputField>
+          </apex:column>
+          <apex:column headervalue="Email">
+              <apex:facet name="header">
+                     <apex:commandLink style="color:black;" action="{!sortData}" value="Email {!IF(fieldToSort=='Email',IF(orderflag==true,'?','?'),'')}" reRender="rendTable"  status="sort">
+                          <apex:param value="Email" name="column" assignTo="{!fieldToSort}" />
+                     </apex:commandLink>
+               </apex:facet>
+              <apex:outputField value="{!lead.email}">
+                <apex:inlineEditSupport hideOnEdit="editButton" event="ondblclick"
+                changedStyleClass="myBoldClass" resetFunction="resetInlineEdit"/>
+               </apex:outputField>
+          </apex:column>
+          <apex:column headervalue="Phone">
+              <apex:facet name="header">
+                     <apex:commandLink style="color:black;" action="{!sortData}" value="Phone {!IF(fieldToSort=='Phone',IF(orderflag==true,'?','?'),'')}" reRender="rendTable"  status="sort">
+                          <apex:param value="Phone" name="column" assignTo="{!fieldToSort}" />
+                     </apex:commandLink>
+               </apex:facet>
+              <apex:outputField value="{!lead.phone}">
+                <apex:inlineEditSupport hideOnEdit="editButton" event="ondblclick"
+                changedStyleClass="myBoldClass" resetFunction="resetInlineEdit"/>
+               </apex:outputField>
+          </apex:column>
+          <apex:column headervalue="Status">
+              <apex:facet name="header">
+                     <apex:commandLink style="color:black;" action="{!sortData}" value="Status {!IF(fieldToSort=='Status',IF(orderflag==true,'?','?'),'')}" reRender="rendTable"  status="sort">
+                          <apex:param value="Status" name="column" assignTo="{!fieldToSort}" />
+                     </apex:commandLink>
+               </apex:facet>
+              <apex:outputField value="{!lead.status}">
+                <apex:inlineEditSupport hideOnEdit="editButton" event="ondblclick"
+                changedStyleClass="myBoldClass" resetFunction="resetInlineEdit"/>
+               </apex:outputField>
+          </apex:column>
+          
+      </apex:pageBlockTable>
+      <apex:pageBlockButtons location="bottom">
+      
+                  <apex:commandLink styleClass="listItem" action="{!firstpage}" status="st1"  reRender="rendTable">
+                      <span class="listItemPad">First </span>
+                  </apex:commandLink>
+             
+                  <apex:commandLink styleClass="listItem" action="{!previouspage}" status="st1"  reRender="rendTable">
+                      <span class="listItemPad"> Prev </span>
+                  </apex:commandLink>
+             
+                  <apex:commandLink styleClass="listItem" action="{!nextpage}" reRender="rendTable" status="st1">
+                      <span class="listItemPad"> Next </span>
+                  </apex:commandLink>
+             
+                 <apex:commandLink styleClass="listItem" action="{!lastpage}" status="st1"  reRender="rendTable">
+                      <span class="listItemPad"> Last </span>
+                  </apex:commandLink>
+             
+      </apex:pageBlockButtons>
+  </apex:pageBlock>
+</apex:form>
+</apex:page>

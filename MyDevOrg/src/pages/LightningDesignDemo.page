@@ -1,0 +1,49 @@
+<apex:page controller="LightningDesignDemoController" standardStylesheets="false" showHeader="false" docType="html-5.0">
+    <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <head>
+            <link rel="stylesheet" href="{!URLFOR($Resource.SLDS, '/assets/styles/salesforce-lightning-design-system.min.css')}"/>
+        </head>
+        <body>
+            <apex:form styleClass="slds slds-form-element">
+                <table class="slds-table slds-table--bordered slds-table--cell-buffer slds-no-row-hover slds-form-element__control">
+                    <thead>
+                        <tr class="slds-text-title--caps">
+                            <th scope="col">
+                                <div class="slds-truncate" title="Opportunity Name">Account Name</div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate" title="Account Name">Account Phone</div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate" title="Account Website">Account Website</div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate" title="Action">Action</div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <apex:repeat value="{!accList}" var="acc">
+                            <tr>
+                                <th scope="row" data-label="Account Name">
+                                    <apex:inputText value="{!acc.Name}" styleClass="slds-input"/>
+                                </th>
+                                <td data-label="Account Phone">
+                                    <apex:inputText value="{!acc.Phone}" styleClass="slds-input"/>
+                                </td>
+                                <td data-label="Account Website">
+                                    <apex:inputText value="{!acc.Website}" styleClass="slds-input"/>
+                                </td>
+                                <td data-label="Action">
+                                    <svg class="slds-icon--small slds-m-right--x-small">
+                                        <use xlink:href="{!URLFOR($Resource.SLDS, '/assets/icons/utility-sprite/svg/symbols.svg#add')}"></use>
+                                    </svg>
+                                </td>
+                            </tr>
+                        </apex:repeat>
+                    </tbody>
+                </table>
+            </apex:form>
+        </body>
+    </html>
+</apex:page>

@@ -1,0 +1,8 @@
+<apex:page standardStylesheets="false">
+    <style>
+        .foot{
+            background:#F56366 !important;
+        }
+    </style>
+    <c:Scientist ></c:Scientist>
+</apex:page>

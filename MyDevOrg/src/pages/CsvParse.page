@@ -1,0 +1,15 @@
+<apex:page controller="CsvParseController">
+<apex:sectionHeader title="CSV" subtitle="CSV Parsing"/>
+<apex:pageBlock >
+        <apex:pageBlockTable value="{!cmodal}" var="modal">
+            <apex:column value="{!modal.firstname}"/>
+            <apex:column value="{!modal.lastname}"/>
+            <apex:column value="{!modal.account}"/>
+            <apex:column value="{!modal.phone}"/>
+            <apex:column value="{!modal.email}"/>
+            <apex:column value="{!modal.amount}"/>
+        </apex:pageBlockTable>
+        <br/>
+        {!text}
+</apex:pageBlock>
+</apex:page>

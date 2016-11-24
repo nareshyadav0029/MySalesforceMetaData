@@ -1,0 +1,24 @@
+<apex:page tabStyle="Account" standardController="Account" sidebar="false" showHeader="true">
+<apex:form >
+<apex:sectionHeader title="My Account" subtitle="Information"/>
+    <apex:pageBlock title="My Info">
+        <apex:pageBlockButtons >
+            <apex:commandButton value="Edit" action="{!Edit}"/>
+            <apex:commandButton value="Save" action="{!Save}"/>
+            <apex:commandButton value="Quicksave" action="{!Quicksave}"/>
+            <apex:commandButton value="Cancel" action="{!Cancel}"/>
+        </apex:pageBlockButtons>
+        
+        <apex:pageBlockSection columns="1" title="Information">
+            <apex:outputField value="{!Account.Name}"/>
+            <apex:outputField value="{!Account.AccountNumber}"/>
+            <apex:outputField value="{!Account.Type}"/>
+            <apex:outputField value="{!Account.Phone}"/>
+            <apex:outputField value="{!Account.Website}"/>
+            <apex:outputField value="{!Account.AccountSource}"/>
+            <apex:outputField value="{!Account.BillingCity}"/>
+        </apex:pageBlockSection>
+        
+    </apex:pageBlock>
+</apex:form> 
+</apex:page>

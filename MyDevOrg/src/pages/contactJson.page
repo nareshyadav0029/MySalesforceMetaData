@@ -1,0 +1,3 @@
+<apex:page Controller="contactJsonController" contentType="application/x-JavaScript; charset=utf-8" showHeader="false" standardStylesheets="false" sidebar="false">
+{!contactJSON}
+</apex:page>

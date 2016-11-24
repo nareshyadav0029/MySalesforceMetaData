@@ -1,0 +1,5 @@
+<apex:page standardStylesheets="false" standardController="Account"> 
+    <c:Scientist >
+    
+    </c:Scientist>    
+</apex:page>

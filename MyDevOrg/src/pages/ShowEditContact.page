@@ -1,0 +1,20 @@
+<apex:page controller="ShowEditContactController" tabStyle="Student__c">
+<apex:form >
+    <apex:pageBlock >
+        <apex:pageBlockButtons location="top">
+            <apex:commandButton value="Update" action="{!UpdateContact}"/>
+        </apex:pageBlockButtons>
+        <apex:pageBlockSection columns="1" title="Edit Contacts">
+            <apex:pageBlockTable value="{!contact_list}" var="con">
+                <apex:column headerValue="First Name">
+                    <apex:inputField value="{!con.firstname}"/>
+                </apex:column>
+                <apex:column headerValue="Last Name">
+                    <apex:inputField value="{!con.lastname}"/>
+                </apex:column>
+                <apex:column headerValue="UpdateCount" value="{!con.UpdateCount__c}"/>
+            </apex:pageBlockTable>
+        </apex:pageBlockSection>
+    </apex:pageBlock>
+</apex:form>
+</apex:page>

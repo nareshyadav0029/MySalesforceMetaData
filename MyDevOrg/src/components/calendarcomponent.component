@@ -1,0 +1,84 @@
+<apex:component controller="CalendarController">
+
+    <apex:attribute name="Year" description="" assignTo="{!yearVal}" type="Integer"/>
+    <apex:attribute name="Month" description="" assignTo="{!monthVal}" type="Integer"/>
+    <apex:attribute name="Holiday" description="" assignTo="{!tempHoliday}" type="String"/>
+
+    <style>
+        .calTable{
+            width: 50%;
+            border: 1px solid wheat;
+            border-collapse: collapse;
+            text-align: center;
+            font-family: -webkit-body;
+        }
+        .headth{
+            background:white;
+            font-size: medium;
+            color: #F17062;
+        }
+        .calTable th, .calTable td{
+            padding:10px;
+            text-align: center;
+        }
+        .headtd{
+            height: 70px;
+            background: #F17062;
+            font-size: x-large;
+            color:white;
+        }
+        .hday{
+            background:#F17062;
+            color:white
+        }
+    </style>
+
+    <script>
+        function ChangeTheam(obj){
+            for(i=0;i<document.getElementsByClassName("headtd").length;i++){
+                document.getElementsByClassName("headtd")[i].style.background = obj.value;
+            }
+            for(i=0;i<document.getElementsByClassName("headth").length;i++){
+                document.getElementsByClassName("headth")[i].style.color = obj.value;
+            }
+        }
+    </script>
+    
+    <div>
+        <input type="color" class="colorname" name="favcolor" value="#F17062" onchange="ChangeTheam(this);"/>
+    </div>
+    
+    <center>
+        <table id="calTable" class="calTable" cellpadding="5px">
+            <tr>
+                <td colspan="7" id="headtd" class="headtd">
+                    <center>
+                        <apex:outputText value="{0,date,MMMM YYYY}"> 
+                             <apex:param value="{!IF(OR(yearVal<1900,monthVal<1),'',DATE(yearVal,monthVal,1))}" />
+                        </apex:outputText>
+                    </center>
+                </td>
+            </tr>
+            <tr>
+                <th class="headth">Sun</th>
+                <th class="headth">Mon</th>
+                <th class="headth">Tue</th>
+                <th class="headth">Wed</th>
+                <th class="headth">Thu</th>
+                <th class="headth">Fri</th>
+                <th class="headth">Sat</th>
+            </tr>
+            <apex:repeat value="{!week}" var="w">
+                <tr>
+                    <apex:repeat value="{!w.dayList}" var="d">
+                        <td bgcolor="{!IF(MOD(d.day-DATE(1900,1,6),7)== 1,'#5cb85c',IF(d.isHoliday,'#F17062',''))}">
+                            <apex:outputText value="{0,date,d}">
+                                 <apex:param value="{!d.day}" />
+                            </apex:outputText>
+                        </td>
+                    </apex:repeat>
+                </tr>
+            </apex:repeat>
+        </table>
+    </center>
+</apex:component>

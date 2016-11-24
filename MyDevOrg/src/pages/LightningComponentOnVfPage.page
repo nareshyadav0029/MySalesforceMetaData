@@ -1,0 +1,17 @@
+<apex:page standardStylesheets="false" showHeader="false">
+    <apex:includeScript value="/lightning/lightning.out.js" />
+    
+    <div id="lightning" />
+
+    <script>
+        $Lightning.use("c:expenseTracker", function() {
+          $Lightning.createComponent("c:form",
+          { label : "" },
+          "lightning",
+          function(cmp) {
+            // do some stuff
+          });
+        });
+    </script>
+    
+</apex:page>

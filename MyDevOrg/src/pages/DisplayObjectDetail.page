@@ -1,0 +1,62 @@
+<apex:page controller="DisplayObjectDetail" readOnly="true">
+    <script type="text/javascript" src="/resource/jQuery"></script>
+    <script type="text/javascript">
+     
+        var j$ = jQuery.noConflict();
+        var timeInter =setInterval(function(){iterateObjectMethod()},2500);
+ 
+        function iterateObjectMethod(){
+            getObjectList();
+            var iterationDone = j$("#isIterationDoneDiv").text();
+            if(iterationDone  == 'Yes'){
+                j$("#isIterationDoneDiv").hide();
+                clearInterval(timeInter);
+            }
+        }
+    </script>   
+ 
+    <apex:actionStatus id="myStatus" startText="Fetching the Data..." stopText=""/><br/><br/>
+    <apex:form >
+        <apex:actionFunction action="{!ObjectList}" status="myStatus" name="getObjectList" reRender="thePageBlock"/>
+    </apex:form>
+    <h1>Here's the List of Standard and Custom Objects:</h1>
+    <apex:pageBlock id="thePageBlock">
+        <b>Standard Objects:</b>
+        <apex:pageBlockTable value="{!standardObjList}" var="std">
+            <apex:column headerValue="Name">{!std.label}</apex:column>
+            <apex:column headerValue="API Name">{!std.apiName}</apex:column>
+            <apex:column headerValue="Key Prefix">{!std.keyPrefix}</apex:column>
+            <apex:column headerValue="ChildObjects">
+                
+                <apex:repeat value="{!std.childObjectArray}" var="ch">
+                    {!ch}<br/>
+                 
+                </apex:repeat>
+            </apex:column>
+            <apex:column headerValue="Record Types">
+                <apex:repeat value="{!std.recordTypeArray}" var="rt">
+                    {!rt}<br/>
+                </apex:repeat>
+            </apex:column>
+        </apex:pageBlockTable>
+        <br/><br/><br/>
+        <b>Custom Objects:</b>
+        <apex:pageBlockTable value="{!customObjList}" var="cust">
+            <apex:column headerValue="Name">{!cust.label}</apex:column>
+            <apex:column headerValue="API Name">{!cust.apiName}</apex:column>
+            <apex:column headerValue="Key Prefix">{!cust.keyPrefix}</apex:column>
+            <apex:column headerValue="Custom Setting">{!cust.isCustomSet}</apex:column>
+            <apex:column headerValue="ChildObjects">
+                <apex:repeat value="{!cust.childObjectArray}" var="ch">
+                    {!ch}<br/>
+                </apex:repeat>
+            </apex:column>
+            <apex:column headerValue="Record Types">
+                <apex:repeat value="{!cust.recordTypeArray}" var="rt">
+                    {!rt}<br/>
+                </apex:repeat>
+            </apex:column>
+        </apex:pageBlockTable>
+        <div id="isIterationDoneDiv">{!isIterationDone}</div>
+     </apex:pageBlock>
+</apex:page>

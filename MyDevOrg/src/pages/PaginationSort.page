@@ -1,0 +1,91 @@
+<apex:page controller="PaginationSortController" tabStyle="Lead">
+    <apex:sectionHeader title="Lead" subtitle="Records"/>
+    
+    <style>
+        .link{
+            text-decoration:none !important;
+        }
+        .link:hover{
+            font-size:14px !important;
+            color:green !important;
+        }
+    </style>
+    
+    <apex:form id="form">
+    
+    <table align="right">
+        <tr>
+            <apex:repeat value="{!alphabet_list}" var="alpha">
+                <td>
+                    <apex:commandLink rendered="{!select_alphabet != alpha}" action="{!sort}" status="Filter" reRender="form" styleClass="link">
+                        <span class="listItemPad">{!alpha}</span>
+                        <apex:param value="{!alpha}" name="select_alphabet" assignTo="{!select_alphabet}" />
+                    </apex:commandLink>
+                    
+                    <apex:commandLink rendered="{!select_alphabet == alpha}" action="{!sort}" status="Filter" reRender="form" styleClass="link">
+                        <span class="listItemPad">{!alpha}</span>
+                        <apex:param value="{!alpha}" name="select_alphabet" assignTo="{!select_alphabet}" />
+                    </apex:commandLink>
+                    
+                </td>
+            </apex:repeat>
+        </tr>
+    </table>
+    
+        <apex:pageBlock id="Rend">
+        
+        <apex:actionStatus id="Sort" startStyle="color:#40E0D0; font-size:15px; font-weight:bold;" startText="Sorting..."/>
+        <apex:actionStatus id="Filter" startStyle="color:#696969; font-size:15px; font-weight:bold;" startText="Filtering..."/>
+        
+        <apex:actionStatus id="prevpaging" startStyle="color:#6B8E23; font-size:15px; font-weight:bold;" startText="Processing..."/>
+        <apex:actionFunction status="prevpaging" name="prev" action="{!prevpage}" reRender="Rend"/>
+        
+        <apex:actionStatus id="nextpaging" startStyle="color:#B22222; font-size:15px; font-weight:bold;" startText="Processing..."/>
+        <apex:actionFunction status="nextpaging" name="next" action="{!nextpage}" reRender="Rend"/>
+        
+        <apex:pageBlockButtons location="both">
+            <apex:commandButton value="Prev" onclick="prev(); return false;" disabled="{!prev}"/>
+            <apex:commandButton value="Next" onclick="next(); return false;" disabled="{!next}"/>
+        </apex:pageBlockButtons>
+        
+                <apex:pageBlockTable Value="{!lead_Templist}" var="lead">
+                    <apex:column >
+                        <apex:facet name="header">
+                            <apex:commandLink value="First Name" action="{!toggleSort}" status="Sort" rerender="Rend">
+                                <apex:param name="sortField" value="firstName" assignTo="{!sortField}"/>
+                            </apex:commandLink>
+                        </apex:facet>
+                        <apex:outputField value="{!lead.firstName}"/>
+                    </apex:column>
+                    
+                    <apex:column >
+                        <apex:facet name="header">
+                            <apex:commandLink value="Last Name" action="{!toggleSort}" status="Sort" rerender="Rend">
+                                <apex:param name="sortField" value="lastName" assignTo="{!sortField}"/>
+                            </apex:commandLink>
+                        </apex:facet>
+                        <apex:outputField value="{!lead.lastname}"/>
+                    </apex:column>
+                    
+                    <apex:column >
+                        <apex:facet name="header">
+                            <apex:commandLink value="Email" action="{!toggleSort}" status="Sort" rerender="Rend">
+                                <apex:param name="sortField" value="email" assignTo="{!sortField}"/>
+                            </apex:commandLink>
+                        </apex:facet>
+                        <apex:outputField value="{!lead.email}"/>
+                    </apex:column>
+                    
+                    <apex:column >
+                        <apex:facet name="header">
+                            <apex:commandLink value="Phone" action="{!toggleSort}" status="Sort" rerender="Rend">
+                                <apex:param name="sortField" value="phone" assignTo="{!sortField}"/>
+                            </apex:commandLink>
+                        </apex:facet>
+                        <apex:outputField value="{!lead.phone}"/>
+                    </apex:column>
+                    
+                </apex:pageBlockTable>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

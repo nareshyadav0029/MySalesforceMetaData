@@ -1,0 +1,12 @@
+<apex:page standardController="Contact" extensions="InsertVfPageController">
+    <apex:form >
+        <apex:pageBlock >
+            <apex:pageBlockSection >
+               <apex:inputFile fileName="{!att.Name}" value="{!att.Body}" contentType="{!att.contentType}"/>
+            </apex:pageBlockSection>
+            <apex:pageBlockButtons >
+                <apex:commandButton value="Save" action="{!save}"/>
+            </apex:pageBlockButtons>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

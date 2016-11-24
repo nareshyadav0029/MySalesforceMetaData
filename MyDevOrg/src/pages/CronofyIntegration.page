@@ -1,0 +1,7 @@
+<apex:page controller="CronofyIntegrationController" action="{!connect}">
+    <apex:form >
+        <apex:commandButton value="Fetch Event" action="{!getAllEvents}"/>
+    </apex:form>
+    
+    {!events}
+</apex:page>

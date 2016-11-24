@@ -1,0 +1,96 @@
+<apex:component layout="none">
+    <apex:componentBody />
+    <style>
+
+        .logo{
+            margin-left:50px;
+        }
+        .menu{
+            width:100%;
+            height:39px;
+            margin-top:70px;
+            margin-left:50px;
+            margin-bottom:0px;    
+        }
+        .menu ul{
+            display:inline;
+        }
+        .menu ul li{
+            display:inline;
+            margin-left:0px;
+            display:block;
+            float:left;
+        }
+        .menu ul li a{
+            padding:12px;
+            margin-right:2px;
+            display:block;
+            text-decoration:none;
+            color:#FFF;
+        }
+        #h{
+            background:#1588C7;
+            border-radius:5px;
+            border-bottom-left-radius:0px;
+            border-bottom-right-radius:0px;
+        }
+        #Add{
+            background:#F7941D;
+            font-weight:900;
+            border-radius:5px;
+            border-bottom-left-radius:0px;
+            border-bottom-right-radius:0px;
+        }
+        #Mem{
+            background:#CED700;
+            font-weight:900;
+            border-radius:5px;
+            border-bottom-left-radius:0px;
+            border-bottom-right-radius:0px;
+        }
+        #App{
+            background:#E14EA7;
+            font-weight:900;
+            border-radius:5px;
+            border-bottom-left-radius:0px;
+            border-bottom-right-radius:0px;
+        }
+        #Rec{
+            background:#F56366;
+            font-weight:900;
+            border-radius:5px;
+            border-bottom-left-radius:0px;
+            border-bottom-right-radius:0px;
+        }
+        #Sch{
+            background:#EEEA17;
+            font-weight:900;
+            border-radius:5px;
+            border-bottom-left-radius:0px;
+            border-bottom-right-radius:0px;
+        }
+    </style>
+    
+    <div class="container">
+            <div class="logo">
+                <a href="#"><img src="{!$Resource.Scientist}" style="margin-top:20px;"/></a>
+            </div>
+            
+            <div class="menu">
+                <ul id="nav">
+                    <li><a id="h" href="https://c.ap1.visual.force.com/apex/ScientistProject_Home"><img src="{!$Resource.Home}" style="height:15px; width:20px;" /></a></li>
+                    <li><a id="Add" href="https://c.ap1.visual.force.com/apex/S_Address">Address</a></li>
+                    <li><a id="Mem" href="https://c.ap1.visual.force.com/apex/S_Members">Members</a></li>
+                    <li><a id="App" href="https://c.ap1.visual.force.com/apex/S_Application">Application</a></li>
+                    <li><a id="Rec" href="https://c.ap1.visual.force.com/apex/S_Recommendation">Recommendation</a></li>
+                    <li><a id="Sch" href="https://c.ap1.visual.force.com/apex/S_Scholarships">Scholarships</a></li>
+               </ul>
+          </div>
+          
+          <div class="foot" style="padding-top:12px; padding-bottom:12px; width:100%; background:#1588C7;">
+          
+          </div>
+                  
+    </div>
+
+</apex:component>

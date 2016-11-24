@@ -1,0 +1,92 @@
+<apex:page id="pg" controller="ManageGoalsController" tabStyle="Goal__c">
+    
+    <script type="text/javascript">
+    </script>
+    
+    <style type="text/css">
+        .ta{
+            margin-left:5px;
+            line-height: 5px;
+        }
+        .addBtn{
+        
+        }
+        .adding{
+            cursor: pointer;
+        }
+        .remove{
+            cursor: pointer;
+        }
+    </style>
+    
+    <apex:form id="frm">
+    
+    <apex:pageMessages ></apex:pageMessages>
+        <apex:actionFunction name="addtask" action="{!addTask}" reRender="frm">
+            <apex:param assignTo="{!goalIndex}" name="indexgoal" value=""/>
+        </apex:actionFunction>
+        <apex:actionFunction name="deltask" action="{!delTask}" reRender="frm">
+            <apex:param assignTo="{!goalIndex}" name="indexofgoal" value=""/>
+            <apex:param assignTo="{!taskIndex}" name="indexoftask" value=""/>
+        </apex:actionFunction>
+        <apex:actionFunction name="editgoal" action="{!editGoal}" reRender="frm">
+            <apex:param assignTo="{!goalIndex}" name="Editindexofgoal" value=""/>
+        </apex:actionFunction>
+        <apex:actionFunction name="insert" action="{!insertGoal}" reRender="frm"/>
+    
+        <apex:pageBlock id="pgblk">
+            <apex:pageBlockButtons >
+                <apex:commandButton value="Save"/>
+                <apex:commandButton value="Add Goal" action="{!addgoal}" reRender="frm"/>
+                <apex:commandButton value="Cancel"/>
+            </apex:pageBlockButtons> 
+            
+            <apex:commandButton value="Add Goal" onclick="insert(); return false" rendered="" styleClass="addBtn"/>
+                <apex:variable value="{!0}" var="i"/>
+                <apex:variable value="{!1}" var="k"/>
+                
+                <apex:repeat value="{!mgList}" var="m">
+                    <table class="list " border="0" cellpadding="0" cellspacing="0">
+                        <tr>
+                            <td style="font-weight:bold;font-family: Verdana;line-height: 25px">{!k}</td>
+                            <td><apex:inputTextarea value="{!m.gObj.Goal__c}" rendered="{!m.flag}" cols="170" rows="1" styleClass="ta"/> 
+                                <b><apex:outputText value="{!m.gObj.Goal__c}" rendered="{!!m.flag}" /></b> 
+                            </td>
+                            <td style="text-align: center;"><apex:commandLink value="Edit" onclick="editgoal({!i});return false"/></td>
+                            <td><apex:image value="{!$Resource.addGoal}" height="25px" width="25px" onclick="addtask({!i}); return false" styleClass="adding"/></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>
+                                <table class="list " border="0" cellpadding="0" cellspacing="0" id="tasktable">           
+                                    <tr class="headerRow">
+                                       <th class="headerRow">Task Name</th>
+                                       <th class="headerRow">Subject</th>
+                                       <th class="headerRow">Status</th>
+                                       <th class="headerRow">Due Date</th>
+                                       <th class="headerRow">Edit</th>
+                                       <th class="headerRow">Delete</th>
+                                   </tr>
+                                   <apex:variable value="{!0}" var="j"/>
+                                   <apex:repeat value="{!m.taskList}" var="t">
+                                      <tr class="dataRow">                             
+                                          <td><apex:inputText value="{!t.Name}"/></td>
+                                          <td><apex:inputField value="{!t.Subject__c}"/></td>
+                                          <td><apex:inputField value="{!t.Status__c}" styleClass="pick"/></td>
+                                          <td><apex:inputField value="{!t.Due_Date__c}"/></td>
+                                          <td><apex:commandLink value="Edit"/></td>
+                                          <td><apex:image value="{!$Resource.removeGoal}" height="25px" width="25px" onclick="deltask('{!i}', '{!j}'); return false" styleClass="remove"/></td>
+                                      </tr>
+                                      <apex:variable value="{!j+1}" var="j"/>
+                                   </apex:repeat>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>                
+                    <apex:variable value="{!i+1}" var="i"/>
+                    <apex:variable value="{!k+1}" var="k"/>                                               
+                    </apex:repeat>
+                  
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

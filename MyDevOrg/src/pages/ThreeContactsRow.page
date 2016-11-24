@@ -1,0 +1,14 @@
+<apex:page controller="ThreeContactsRowController" tabStyle="EmailService__c">
+    <apex:form >
+        <apex:pageBlock >
+            <apex:pageBlockSection columns="1" title="Contact Details">
+                <apex:pageBlockTable value="{!modelrow}" var="model">
+                    <apex:column headerValue="S.No" value="{!model.s_no}"/>
+                    <apex:column headerValue="First Name" value="{!model.contacts.firstname}"/>
+                    <apex:column headerValue="Last Name" value="{!model.contacts.lastname}"/>
+                    <apex:column headerValue="Email" value="{!model.contacts.email}"/>
+                </apex:pageBlockTable>
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

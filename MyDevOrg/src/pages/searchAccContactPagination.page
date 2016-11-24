@@ -1,0 +1,135 @@
+<apex:page Controller="searchAccContactPaginationcont" standardStylesheets="false" tabStyle="Account">
+<apex:sectionHeader title="Account" subtitle="Search"/>
+<apex:includeScript value="{!$Resource.JQuery}"/>
+    
+    <style type="text/css">
+        .searchbtn{
+            background: none repeat scroll 0 0 wheat !important;
+            color: gray !important;
+            border: 1px solid grey !important;
+            font-family: Verdana !important;
+            height: 30px;
+            margin-left: 20px !important;
+            width: 65px;
+        }
+        .searchbtn:hover{
+            background: green !important;
+            color: white !important;
+        }
+        .txtbox {
+            color: graytext;
+            font-family: Verdana;
+            font-size: 15px;
+            height: 30px;
+            width: 200px;
+            margin-left:15px;
+        }
+        .label {
+            color: graytext;
+            font-family: Times New Roman;
+            font-size: 18px;
+            font-weight: bolder;
+        }
+        .popupback{
+            background-color:gray !important;
+            opacity: 0.75 !important;
+            filter: alpha(opacity = 75) !important;
+            position: absolute !important;
+            width: 100% !important;
+            height: 100% !important;
+            top: 0 !important;
+            left: 0 !important;
+            z-index: 9998 !important;
+        }
+        .popup{
+            background-color: white !important;
+            border-width: 0px !important;
+            border-radius:10px !important;
+            z-index: 9999 !important;
+            left: 50% !important;
+            padding:20px !important;
+            position: absolute !important;
+            /* These are the 3 css properties you will need to change so the popup 
+            displays in the center of the screen. First set the width. Then set 
+            margin-left to negative half of what the width is. You can add 
+            the height property for a fixed size pop up if you want.*/
+            margin-left: -100px !important;
+            top:40% !important;    
+        }
+    </style>
+   
+    <script type="text/javascript">
+        
+        function check(url){
+             if($('[id$=checkbox]').is(":checked")){
+                 window.open(url , 'SendEmail' ,'width=650,height=550');
+             }
+        }
+        
+        function openPopUpWindow1(detail_url){
+            if($('[id$=checkbox]').is(":checked")){         
+                 window.open(detail_url , 'Detail' ,'width=650,height=550');
+             }
+        }
+    </script>
+   
+    <apex:form id="form">
+ 
+    <apex:actionStatus id="account">
+        <apex:facet name="start">
+            <apex:outputPanel styleClass="popupback">
+                <apex:image value="{!$Resource.SearchImg}" styleClass="popup"/>
+            </apex:outputPanel>
+        </apex:facet>
+    </apex:actionStatus>
+    <apex:actionFunction status="account" name="search" action="{!searchaccount}" reRender="form"/>
+    <apex:actionFunction status="account" name="fetchcon" action="{!showcontact}" reRender="form"/>
+    <apex:actionFunction status="account" name="get" action="{!getid}" oncomplete="check('{!url}'); return false" reRender="form">
+        <apex:param name="conid" assignTo="{!selconid}" value=""/>
+    </apex:actionFunction>
+    
+    <apex:actionFunction status="account" name="prev" action="{!prevpage}" reRender="con"/>
+    <apex:actionFunction status="account" name="next" action="{!nextpage}" reRender="con"/>
+    <apex:actionFunction status="account" name="first" action="{!firstpage}" reRender="con"/>
+    <apex:actionFunction status="account" name="last" action="{!lastpage}" reRender="con"/>
+    
+    <apex:actionFunction status="account" name="showPageMessage" action="{!showPageMessage}" oncomplete="openPopUpWindow1('{!detail_url}'); return false" rerender="form">
+    </apex:actionFunction>
+    
+        <apex:pageBlock id="pgblk"> 
+            <apex:outputLabel value="Search" styleClass="label"/>
+            <apex:inputText value="{!name}" html-placeholder="Enter Account name" styleClass="txtbox"/>
+            <apex:commandButton value="Search" styleClass="searchbtn" onclick="search(); return false;"/>
+        </apex:pageBlock>
+        
+        <apex:pageBlock title="Accounts" id="acc" rendered="{!flag}">
+            <apex:selectRadio onchange="fetchcon(); return false" value="{!selaccid}" layout="pageDirection">
+                <apex:selectOptions value="{!select_acc}"/>
+            </apex:selectRadio> 
+        </apex:pageBlock>
+        
+        <apex:pageBlock title="Contacts" id="con" rendered="{!con_flag}">
+            <apex:pageMessages rendered="{!msg_flag}"></apex:pageMessages>
+            <apex:pageBlockButtons location="top">
+                <apex:commandButton value="Send Email" onclick="get(); return false"/>
+                <apex:commandButton value="Print Detail" onclick="showPageMessage(); return false"/>
+            </apex:pageBlockButtons>
+            
+            <apex:pageBlockTable value="{!mainListOfContact}" var="con">
+                <apex:column headerValue="CheckBox">
+                    <apex:inputCheckbox value="{!con.check}" id="checkbox" styleClass="check"/>
+                </apex:column>
+                <apex:column value="{!con.contact.firstname}"/>
+                <apex:column value="{!con.contact.lastname}"/>
+            </apex:pageBlockTable>
+            <apex:pageBlockButtons location="Bottom">
+                <apex:commandButton value="First" onclick="first(); return false;" disabled="{!first}"/>
+                <apex:commandButton value="Prev" onclick="prev(); return false;" disabled="{!prev}"/>
+                <apex:commandButton value="Next" onclick="next(); return false;" disabled="{!next}"/>
+                <apex:commandButton value="Last" onclick="last(); return false;" disabled="{!last}"/>
+            </apex:pageBlockButtons>
+        </apex:pageBlock>   
+          
+    </apex:form>   
+       
+</apex:page>

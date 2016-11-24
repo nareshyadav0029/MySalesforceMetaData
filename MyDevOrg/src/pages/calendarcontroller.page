@@ -1,0 +1,8 @@
+<apex:page controller="CalendarController" sidebar="false" >
+
+    <apex:pageMessages />
+
+    <c:calendarcomponent Year="2016" Month="2" Holiday="3,8,30,12"/>
+    <c:calendarcomponent Year="2015" Month="7" Holiday="3,8,30,12"/>
+    
+</apex:page>

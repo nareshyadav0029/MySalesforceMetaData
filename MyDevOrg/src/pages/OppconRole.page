@@ -1,0 +1,66 @@
+<apex:page controller="OppconRolecontroller" standardStylesheets="true" tabStyle="Opportunity">
+    <apex:sectionHeader title="Opportunity Edit" subtitle="New Opportunity"/>
+    
+    <style type="text/css">
+        .link{
+            float:right;
+        }
+    </style>
+    
+    <apex:form id="frm">
+        <apex:pageMessages />
+    
+        <apex:pageBlock mode="Edit" title="Opportunity Edit">
+            <apex:pageBlockButtons >
+                <apex:commandButton value="Add" action="{!addOpprole}" reRender="allOpp"/>
+            </apex:pageBlockButtons>
+            
+        <!--    Opportunity information    --> 
+           
+            <apex:pageBlockSection title="Opportunity Information" id="opp">
+                <apex:outputText label="Opportunity Owner">{!$User.FirstName} {!$User.LastName}</apex:outputText>
+                <apex:inputField value="{!oppObj.Amount}"/>
+                <apex:inputField value="{!oppObj.Name}"/>
+                <apex:inputField value="{!oppObj.CloseDate}" showDatePicker="true"/>
+                <apex:inputField value="{!oppObj.AccountId}"/>
+                <apex:inputField value="{!oppObj.StageName}"/>
+                <apex:inputField value="{!oppObj.LeadSource}"/>
+                <apex:inputField value="{!oppObj.Probability}"/>
+                <apex:inputField value="{!oppObj.TotalOpportunityQuantity}" required="true" />
+            </apex:pageBlockSection>
+            
+        <!--    Contact Role    -->  
+        
+            <apex:pageBlockSection title="Contact Role" id="opprole">
+                <apex:inputField value="{!roleObj.ContactId}"/>
+                <apex:inputField value="{!roleObj.Role}"/>
+                <apex:commandLink value="Add Contact Role" action="{!addConrole}" reRender="oppselrole,opprole" styleClass="link"/>
+            </apex:pageBlockSection>
+            
+        <!--    Selected Contact Role    -->  
+            <apex:outputPanel id="oppselrole">
+            <apex:pageBlockSection title="Selected Contact Role">
+                <apex:outputText rendered="{!if(conList.size==0,true,false)}">No Contact Role</apex:outputText>
+                    <apex:selectRadio value="{!seloption}" rendered="{!if(conList.size>0,true,false)}" layout="PageDirection">
+                        <apex:selectOptions value="{!conList}"/>
+                    </apex:selectRadio>
+            </apex:pageBlockSection>
+            </apex:outputPanel>
+        </apex:pageBlock>
+        
+        <apex:pageBlock mode="Edit" id="allOpp">
+            <apex:pageBlockButtons >
+                <apex:commandButton value="Save" action="{!saveOpp}"/>
+                <apex:commandButton value="Cancel"/>
+            </apex:pageBlockButtons>
+            <apex:pageBlockTable value="{!modalList}" var="m" rendered="{!if(modalList.size>0,true,false)}">
+                <apex:column value="{!m.opp.Name}"/>
+                <apex:column value="{!m.opp.CloseDate}"/>
+                <apex:column value="{!m.opp.StageName}"/>
+                <apex:column value="{!m.opp.AccountId}"/>
+                <apex:column headerValue="ContactRole" value="{!m.conName}"/>
+            </apex:pageBlockTable>
+        </apex:pageBlock>
+        
+    </apex:form>
+</apex:page>

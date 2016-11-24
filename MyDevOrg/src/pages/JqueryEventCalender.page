@@ -1,0 +1,72 @@
+<apex:page controller="JqueryEventCalenderController" action="{!pageLoad}">
+
+    <apex:includeScript value="{!$Resource.JQuery}"/>
+    <script src='http://fullcalendar.io/js/fullcalendar-2.1.1/lib/moment.min.js'></script>
+    <script src="http://fullcalendar.io/js/fullcalendar-2.1.1/lib/jquery-ui.custom.min.js"></script>
+    <script src='http://fullcalendar.io/js/fullcalendar-2.1.1/fullcalendar.min.js'></script>
+    <script>
+        //We need to wrap everything in a doc.ready function so that the code fires after the DOM is loaded
+        $(document).ready(function() {   
+            //Call the fullCallendar method. You can replace the '#calendar' with the ID of the dom element where you want the calendar to go. 
+            $('[id$=calendar]').fullCalendar({
+                header: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'month,agendaWeek,agendaDay'
+                },
+                editable: false,
+                events:
+                [
+                    //At run time, this APEX Repeat will reneder the array elements for the events array
+                    <apex:repeat value="{!events}" var="e">
+                        {
+                            title: "{!e.title}",
+                            start: '{!e.startString}',
+                            end: '{!e.endString}',
+                            url: '{!e.url}',
+                            allDay: {!e.allDay},
+                            className: '{!e.className}'
+                        },
+                    </apex:repeat>
+                ]
+            });
+             
+        });
+     
+    </script>
+     
+    <!--some styling. Modify this to fit your needs-->
+    <style>
+        #cal-options {float:left;}
+        #cal-legend { float:right;}
+        #cal-legend ul {margin:0;padding:0;list-style:none;}
+        #cal-legend ul li {margin:0;padding:5px;float:left;}
+        #cal-legend ul li span {display:block; height:16px; width:16px; margin-right:4px; float:left; border-radius:4px;}
+        #calendar {margin-top:20px;}
+        #calendar a:hover {color:#fff !important;}
+         
+        .fc-event-inner {padding:3px;}
+        .event-birthday {background:#56458c;border-color:#56458c;}
+        .event-campaign {background:#cc9933;border-color:#cc9933;}
+        .event-personal {background:#1797c0;border-color:#1797c0;}
+    </style>
+     
+    <apex:sectionHeader title="My Calendar Example"/>
+    <apex:outputPanel id="calPanel">
+        <apex:form >
+            <div id="cal-options">
+                <apex:commandButton value="{!IF(includeMyEvents,'Hide My Events','Show My Events')}" action="{!toggleMyEvents}"/>
+            </div>
+            <div id="cal-legend">
+                <ul>
+                    <li><span class="event-birthday"></span>Contacts Birthdays</li>
+                    <li><span class="event-campaign"></span>Campaigns</li>
+                    <li style="{!IF(includeMyEvents,'','display:none')}"><span class="event-personal"></span>My Events</li>
+                </ul>
+                <div style="clear:both;"><!--fix floats--></div>
+            </div>
+            <div style="clear:both;"><!--fix floats--></div>
+            <div id="calendar"></div>
+        </apex:form>
+    </apex:outputPanel>
+</apex:page>

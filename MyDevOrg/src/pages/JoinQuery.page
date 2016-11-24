@@ -1,0 +1,21 @@
+<apex:page controller="JoinQueryController" tabStyle="account">
+    <apex:pageBlock tabStyle="account">
+        <apex:pageBlockSection columns="1" title="Details">
+            <apex:pageBlockTable value="{!ParentToChild}" var="acc">
+                <apex:column value="{!acc.name}"/>
+                <apex:column >
+                    <apex:dataList value="{!acc.contacts}" var="con">
+                        <b>{!con.Firstname}</b>
+                        <b>{!con.Lastname}</b>
+                    </apex:dataList>
+                </apex:column>
+            </apex:pageBlockTable>
+        </apex:pageBlockSection>
+        <apex:pageBlockSection columns="1" title="Details" collapsible="true">
+            <apex:pageBlockTable value="{!ChildToParent}" var="stu">
+                <apex:column value="{!stu.name}"/>
+                <apex:column value="{!stu.class__r.name}"/>
+            </apex:pageBlockTable>
+        </apex:pageBlockSection>
+    </apex:pageBlock>
+</apex:page>

@@ -1,0 +1,6 @@
+<apex:component layout="none">
+    <apex:attribute name="Title" type="String" description="Getting Title "/>
+    <title> {!title} </title>
+    <h1> This is Header Part---> </h1>
+    <apex:componentBody />
+</apex:component>

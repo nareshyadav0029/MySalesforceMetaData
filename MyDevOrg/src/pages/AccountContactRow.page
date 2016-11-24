@@ -1,0 +1,108 @@
+<apex:page controller="AccountContactRowController" tabStyle="account">
+<apex:actionStatus id="adding">
+    <apex:facet name="start">
+         <apex:outputPanel id="tstpopup">
+                <apex:outputPanel styleClass="popupBackground" layout="block"/>
+                <apex:outputPanel styleClass="custPopup" layout="block">
+                    <img src="/img/loading24.gif" style="vertical-align:middle; horizontal-align:middle"/> 
+                    <span>Please wait...</span>  
+                </apex:outputPanel>
+          </apex:outputPanel> 
+    </apex:facet>
+</apex:actionStatus>
+<style>
+.custPopup{
+    background-color: white;
+    border-width: 0px;
+    border-radius:10px;
+    z-index: 9999;
+    left: 50%;
+    padding:20px;
+    position: absolute;
+    /* These are the 3 css properties you will need to change so the popup 
+    displays in the center of the screen. First set the width. Then set 
+    margin-left to negative half of what the width is. You can add 
+    the height property for a fixed size pop up if you want.*/
+    margin-left: -100px;
+    top:50%;
+}
+.popupBackground{
+    background-color:black;
+    opacity: 0.30;
+    filter: alpha(opacity = 30);
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 9998;
+}
+</style>
+<apex:form >
+    <!-- Apex Action Functions -->
+    <apex:actionFunction immediate="true" name="addAccount" reRender="pgblk" status="adding" action="{!addModel}"/> 
+    <apex:actionFunction immediate="true" name="addContact" reRender="pgblk" status="adding" action="{!addContact}">
+        <apex:param assignTo="{!modelIndex}" value="" name="modelIndex"/>
+    </apex:actionFunction>
+    <apex:actionFunction immediate="true" name="delAccount" reRender="pgblk" status="adding" action="{!delModel}">
+        <apex:param assignTo="{!modelIndex}" value="" name="modelIndexx"/>
+    </apex:actionFunction>
+    <apex:actionFunction immediate="true" name="delContact" reRender="pgblk" status="adding" action="{!delContact}">
+        <apex:param assignTo="{!modelIndex}" value="" name="modelIndexx"/>
+        <apex:param assignTo="{!contactIndex}" value="" name="contactIndex"/>
+    </apex:actionFunction>
+    
+    <!-- Apex Page -->   
+    <apex:pageBlock id="pgblk">
+         <table style="width:90%">
+             <thead>
+                 <tr>
+                     <th><apex:commandButton rendered="{!modelSize == 0}" value="+" onclick="addAccount(); return false;"/></th>
+                     <th>Name</th>
+                     <th>Phone</th>
+                     <th>City</th>
+                 </tr>
+             </thead>
+             <tbody>
+                 <apex:variable var="modelIndex" value="{!0}"/>
+                 <apex:repeat value="{!modelList}" var="m">
+                     <tr>
+                         <td align="right"><apex:commandButton value="+" rendered="{!modelIndex == modelSize-1}" onclick="addAccount(); return false;"/><apex:commandButton value="X" onclick="delAccount({!modelIndex}); return false;"/></td>
+                         <td><apex:inputField value="{!m.acc.name}"/></td>
+                         <td><apex:inputField value="{!m.acc.phone}"/></td>
+                         <td><apex:inputField value="{!m.acc.BillingCity}"/></td>
+                     </tr>
+                     <tr>
+                         <td></td>
+                         <td><apex:commandButton value="+" rendered="{!m.contactSize == 0}" onclick="addContact({!modelIndex}); return false;"/></td>
+                         <td colspan="2">
+                             <table width="90%">
+                                 <thead>
+                                     <th></th>
+                                     <th>First Name</th>
+                                     <th>Last Name </th>
+                                     <th>Email </th>
+                                 </thead>
+                                 <apex:variable value="{!0}" var="contactIndex"/>
+                                 <apex:repeat value="{!m.contactlist}" var="con">
+                                     <tr>
+                                         <td align="right"><apex:commandButton rendered="{!m.contactSize-1 == contactIndex}" value="+" onclick="addContact({!modelIndex}); return false;"/><apex:commandButton value="X" onclick="delContact({!modelIndex},{!contactIndex}); return false;"/></td>
+                                         <td><apex:inputField value="{!con.firstname}"/></td>
+                                         <td><apex:inputField value="{!con.lastname}"/></td>
+                                         <td><apex:inputField value="{!con.email}"/></td>
+                                     </tr>
+                                     <apex:variable value="{!contactIndex+1}" var="contactIndex"/>
+                                 </apex:repeat>
+                             </table>
+                         </td>
+                     </tr>
+                     <apex:variable var="modelIndex" value="{!modelIndex+1}"/>
+                 </apex:repeat>
+             </tbody>
+         </table>
+         <apex:pageBlockButtons >
+             <apex:commandButton value="Save" action="{!saveModel}"/>
+         </apex:pageBlockButtons>
+    </apex:pageBlock>
+</apex:form>
+</apex:page>

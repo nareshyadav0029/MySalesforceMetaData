@@ -1,0 +1,35 @@
+<apex:page controller="AttachmentManagerController" tabStyle="Class__c">
+<apex:sectionHeader title="Copy Attachment" subtitle="Copy"/>
+
+<script language="JavaScript" type="text/javascript">
+            function CloseAndRefresh(){
+            window.opener.location.href="https://c.ap1.visual.force.com/apex/AttachmentManager";
+           //window.opner.location.reload(true);
+           //window.top.location.href = window.top.location.href;
+            window.top.close();
+            }
+    </script>
+
+    <apex:form >
+        <apex:pageBlock id="Rend">
+        
+        <apex:actionStatus id="Fill" startText="Filling Second List"/>
+        <apex:actionFunction status="Fill" name="filling" action="{!fillList}" reRender="Rend"/>
+        
+        <apex:actionStatus id="Copy" startText="Copying Attachment"/>
+        <apex:actionFunction status="Copy" name="adding" action="{!copyatt}" oncomplete="CloseAndRefresh();" reRender="Rend"/>
+        
+            <apex:pageBlockSection title="Select Destination">
+            <apex:selectList value="{!selected_obj}" size="1" multiselect="false" onchange="filling(); return false;">
+                <apex:selectOptions value="{!selectobj}"/>
+            </apex:selectList>
+            
+            <apex:selectList value="{!selected_name}" size="1" multiselect="false" onchange="adding(); return false;">
+                <apex:selectOptions value="{!selectname}"/>
+            </apex:selectList>
+            
+            
+        </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

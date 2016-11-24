@@ -1,0 +1,106 @@
+<apex:page controller="AddaccConcontroller" tabStyle="Account" standardStylesheets="false">
+<apex:sectionHeader title="Add" subtitle="Multiple Accounts and Contacts"/>
+    <style type="Text/Css">
+        .addimg{
+            float: right;
+            height: 22px;
+            border-radius: 12px;
+            width: 25px;
+            cursor: pointer;
+        }
+        .conaddimg{
+            float: left;
+            height: 22px;
+            border-radius: 12px;
+            width: 25px;
+            cursor: pointer;
+        }
+        .condelete{
+            float: right;
+            height: 22px;
+            border-radius: 12px;
+            width: 25px;
+            cursor: pointer;
+        }
+    </style>
+    <apex:form id="form">
+        <apex:pageMessages ></apex:pageMessages>
+        
+        <apex:actionStatus id="Add" startText="Adding..."/>
+        <apex:actionFunction status="Add" name="addacc" action="{!addaccount}" reRender="pgblk"/>
+        <apex:actionFunction status="Add" name="addcon" action="{!addcontact}" reRender="pgblk">
+            <apex:param assignTo="{!modalaccountindex }" name="accountindex" value=""/>
+        </apex:actionFunction> 
+        
+        <apex:actionStatus id="Del" startText="Deleting..."/>
+        <apex:actionFunction status="Del" name="deleteacc" action="{!delacc}" reRender="form">
+            <apex:param assignTo="{!modalaccountindex}" name="accindex" value=""/>
+        </apex:actionFunction>
+        <apex:actionFunction status="Del" name="deletecon" action="{!delcon}" reRender="pgblk">
+            <apex:param assignTo="{!modalaccountindex}" name="accindex" value=""/>
+            <apex:param assignTo="{!modalcontactindex}" name="conindex" value=""/>
+        </apex:actionFunction>
+        
+        <apex:pageBlock title="Insert Accounts And Contacts" id="pgblk">
+              
+            <apex:pageBlockButtons >
+                <apex:commandButton value="Save" action="{!insertAccCon}"/>
+            </apex:pageBlockButtons>
+            
+                <apex:variable value="{!0}" var="i"/>
+                <apex:repeat value="{!modals}" var="mod">               
+                    <table class="list " border="0" cellpadding="0" cellspacing="0">
+                        <tr class="headerRow">
+                            <th class="headerRow"> </th>
+                            <th class="headerRow"> Account Name</th>
+                            <th class="headerRow"> Account Number </th>
+                            <th class="headerRow"> Phone </th>
+                        </tr>
+                        <tr class="dataRow">
+                            <td class="dataCell">
+                                <apex:image value="{!$Resource.Delete}" onclick="deleteacc({!i}); return false" styleClass="addimg"/>
+                                <apex:image value="{!$Resource.Add}" rendered="{!accsize == 0}" onclick="addacc(); return false" styleClass="addimg"/>
+                                <apex:image value="{!$Resource.Add}" rendered="{!i == accsize-1}" onclick="addacc(); return false" styleClass="addimg"/>
+                            </td>
+                            <td class="dataCell"><apex:inputField value="{!mod.acc.Name}"/></td>
+                            <td class="dataCell"><apex:inputField value="{!mod.acc.AccountNumber}"/></td>
+                            <td class="dataCell"><apex:inputField value="{!mod.acc.Phone}"/></td>
+                        </tr>
+                        <tr class="dataRow">
+                            <td class="dataCell"></td>
+                            <td class="dataCell" colspan="4">
+                                <apex:image value="{!$Resource.Add}" rendered="{!mod.consize == 0}" onclick="addcon({!i}); return false" styleClass="conaddimg"/>
+                            </td>
+                        </tr>
+                        <tr class="dataRow">
+                            <td class="dataCell"></td>
+                            <td class="dataCell" colspan="4">
+                                <table class="list " border="0" cellpadding="0" cellspacing="0">           
+                                    <tr class="headerRow">
+                                       <th class="headerRow"> </th>
+                                       <th class="headerRow"> First Name</th>
+                                       <th class="headerRow"> Lastname </th>
+                                       <th class="headerRow"> Email </th>
+                                   </tr>
+                                   <apex:variable value="{!0}" var="j"/>
+                                   <apex:repeat value="{!mod.con_list}" var="con">
+                                      <tr class="dataRow">
+                                          <td class="dataCell">
+                                              <apex:image value="{!$Resource.Delete}" onclick="deletecon({!i},{!j}); return false" styleClass="condelete"/>
+                                              <apex:image value="{!$Resource.Add}" rendered="{!mod.consize-1 == j}" onclick="addcon({!i}); return false" styleClass="condelete"/>
+                                          </td>                              
+                                          <td class="dataCell"><apex:inputField value="{!con.Firstname}"/></td>
+                                          <td class="dataCell"><apex:inputField value="{!con.lastname}"/></td>
+                                          <td class="dataCell"><apex:inputField value="{!con.email}"/></td>
+                                      </tr>
+                                      <apex:variable value="{!j+1}" var="j"/>
+                                   </apex:repeat>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                    <apex:variable value="{!i+1}" var="i"/>             
+               </apex:repeat>
+        </apex:pageBlock>       
+    </apex:form>            
+</apex:page>

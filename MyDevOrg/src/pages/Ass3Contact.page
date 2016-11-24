@@ -1,0 +1,180 @@
+<apex:page controller="Ass3ContactController" sidebar="false" standardStylesheets="false">
+   
+        <title> Contact In JQuery Table </title>
+         <apex:includeScript value="{!$Resource.JQuery}"/>
+         <apex:includeScript value="{!$Resource.Bootstrap}"/>
+         <apex:includeScript value="{!URLFOR($Resource.JTable, 'jtable/js/jquery.dataTables.js')}"/>
+            
+         <style type="text/css">
+             @import "{!$Resource.BootstrapCss}";
+             @import "{!URLFOR($Resource.JTable,'jtable/css/demo_page.css')}";
+             @import "{!URLFOR($Resource.JTable,'jtable/css/jquery.dataTables.css')}";
+        </style>
+            
+        <script>
+        $(document).ready(function() {
+ 
+           oTable = $("#example").dataTable({
+                "sPaginationType": "full_numbers"
+            }); 
+        } );
+        function getid(obj,id,imageurl)
+        {  
+          
+            var fname = $(obj).parent().parent().find('[id$=txtfname]').text();
+            var lname = $(obj).parent().parent().parent().find('[id$=txtlname]').text();
+            var phone = $(obj).parent().parent().parent().find('[id$=txtphone]').text();
+            var email = $(obj).parent().parent().parent().find('[id$=txtemail]').text();
+            
+            $('[id$=fmname]').val(fname);
+            $('[id$=lmname]').val(lname);
+            $('[id$=mphone]').val(phone);
+            $('[id$=memail]').val(email);
+            document.getElementById("image").src = imageurl;
+            
+            $('[id$=txthid]').val(id);
+            $('[id$=myModal]').modal('show');
+        }
+        </script>
+        
+        
+        <style>
+            .container{
+                margin-left:100px;
+                width:1024px;
+                height:350px;
+                padding:30px;
+            }
+            .container table thead tr th{
+                font-family:Verdana, Geneva, sans-serif;
+                font-size:15px;
+                color:#708090;
+                background-color:#87CEEB;
+                
+            }
+            .container table tr td{
+                padding:10px;
+                font-size:12px;
+                font-family:Verdana, Geneva, sans-serif;
+            }
+            .modal-body{
+                background-color:#9ACD32;
+                color:#FFFF00;
+            }
+            .modal-header{
+                background-color:#6B8E23;
+            }
+            .modal-footer{
+                background-color:#6B8E23;
+            }
+            .modal-title{
+                color:#FFFF00;
+            }
+            .modal-body table tr td b{
+                color:#FFFF00;
+            }
+            .modal-body table tr td{
+                color:#556B2F
+            }
+            .btn_close{
+                height:28px;
+                width:50px;
+                border-color:#6B8E23;
+            }
+            .btn_close:hover{
+                background:#FF0000;
+                color:#FFFFFF;
+            }
+            .update{
+                border-color:#6B8E23 !important;
+            }
+            .update:hover{
+                background:#008000 !important;
+                color:#FFFFFF !important;
+            }
+        </style>
+ <apex:form >
+                <apex:inputHidden id="txthid" value="{!conid}" />
+                <!-- Modal -->
+                <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                        <h3 class="modal-title" id="myModalLabel"><b>Edit Contact</b></h3>
+                      </div>
+                      
+                      <div class="modal-header">
+                          <table>
+                              <tr>
+                                  <td><img id="image" height="150px" width="150px" /></td>
+                              </tr>
+                              <tr>
+                                  <td><apex:inputFile fileName="{!att.Name}" value="{!att.Body}" contentType="{!att.contentType}"/></td>
+                              </tr>
+                          </table>
+                      </div>
+                      
+                      <div class="modal-body">
+                          <table>
+                              <tr>
+                                  <td><b>First Name &nbsp;&nbsp;</b></td>
+                                  <td><apex:inputtext value="{!Fname}" id="fmname"/></td>
+                              </tr>
+                              
+                              <tr>
+                                  <td><b>Last Name</b></td>
+                                  <td><apex:inputtext value="{!Lname}" id="lmname"/></td>
+                              </tr>
+                              
+                              <tr>
+                                  <td><b>Phone</b></td>
+                                  <td><apex:inputtext value="{!Phone}" id="mphone"/></td>
+                              </tr>
+                              
+                              <tr>
+                                  <td><b>Email</b></td>
+                                  <td><apex:inputtext value="{!Email}" id="memail"/></td>
+                              </tr>
+                                  
+                          </table>
+                      </div>
+                      
+                      <div class="modal-footer">
+                        <button type="button" class="btn_close" data-dismiss="modal">Close</button>
+                        <apex:commandButton value="Update" action="{!Save}" styleClass="update"/>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+        
+        <div class="container">
+            <table  width="100%"  cellspacing="0" class="display" cellpadding="0" id="example">
+            <thead>
+                <tr>
+                    <th>S.No.</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Phone </th>
+                    <th>Email</th>
+                </tr>
+            </thead>
+            
+            <apex:repeat value="{!modelcontact}" var="model">
+            <tr>
+                <td>{!model.s_no}</td>
+                <td><b><a href="#" onClick="getid(this,'{!model.con.id}','{!model.imgurl}')"><apex:outputField value="{!model.con.firstname}" id="txtfname"/></a></b></td>
+                <td><b><apex:outputField value="{!model.con.lastname}" id="txtlname"/></b></td>
+                <td><apex:outputField value="{!model.con.phone}" id="txtphone"/></td>
+                <td><apex:outputField value="{!model.con.email}" id="txtemail"/></td>
+            </tr>
+        </apex:repeat>
+        </table>
+       </div>
+       
+       
+    </apex:form> 
+    <script>
+        
+    </script>  
+</apex:page>

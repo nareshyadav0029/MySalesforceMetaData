@@ -1,0 +1,21 @@
+<apex:page tabStyle="Account" standardController="Account" sidebar="false" showHeader="true">
+<apex:form >
+    <apex:sectionHeader title="My Account" subtitle="Insert"/>
+    <apex:pageBlock title="My Account">
+        <apex:pageBlockButtons >
+        <apex:commandButton value="Save" action="{!Save}"/>
+        <apex:commandButton value="Quicksave" action="{!Quicksave}"/>
+        <apex:commandButton value="Cancel" action="{!Cancel}"/>
+    </apex:pageBlockButtons>
+        <apex:pageBlockSection columns="1" title="My Account">
+            <apex:inputField value="{!Account.Name}"/>
+            <apex:inputField value="{!Account.AccountNumber}"/>
+            <apex:inputField value="{!Account.Type}"/>
+            <apex:inputField value="{!Account.Phone}"/>
+            <apex:inputField value="{!Account.Website}"/>
+            <apex:inputField value="{!Account.AccountSource}"/>
+            <apex:inputField value="{!Account.BillingCity}"/>
+        </apex:pageBlockSection>
+    </apex:pageBlock>
+</apex:form>
+</apex:page>

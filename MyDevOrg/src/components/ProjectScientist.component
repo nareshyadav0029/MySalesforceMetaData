@@ -1,0 +1,100 @@
+<apex:component layout="none">
+     <style>
+        .container{
+            margin-left:64px;
+            padding: 0 1em;
+        }
+        .navbar{
+            height:110px;
+            border-bottom: 1px solid #22a5de;
+        }
+        .menu{
+            float:right;
+            padding-top: 40px;
+        }
+        .menu ul{
+            display:inline-block;  
+        }
+        .menu ul li{
+            display:inline;
+            list-style:none;
+            padding:10px;
+        }
+        .menu ul li a{
+            text-decoration:none;
+            font-size: 20px;
+            font-weight: bold;
+            font-family: Verdana,Geneva,sans-serif;
+            padding:10px;
+        }
+        #about{
+            color:#F5585A;
+        }
+        #about:hover{
+            background:#F5585A;
+            color:#fff;
+        }
+        #join{
+            color:#F7941E;
+        }
+        #join:hover{
+            background:#F7941E;
+            color:#fff;
+        }
+        #news{
+            color:#1279BF;
+        }
+        #news:hover{
+            background:#1279BF;
+            color:#fff;
+        }
+        #pro{
+            color:#CAD400;
+        }
+        #pro:hover{
+            background:#CAD400;
+            color:#fff;
+        }
+        #res{
+            color:#DC469C;
+        }
+        #res:hover{
+            background:#DC469C;
+            color:#fff;
+        }
+        #sup{
+            color:#F5585A;
+        }
+        #sup:hover{
+            background:#F5585A;
+            color:#fff;
+        }
+    </style>
+
+        <title>Projec Scientist</title>
+        <div class="container">
+            <div class="navbar">
+                <div class="logo">
+                <a href="#"><img src="{!$Resource.Scientist}" style="margin-top:20px; float:left;"/></a>
+                <div class="menu">
+                    <ul>
+                        <li><a id="about" href="#">About</a></li>
+                        <li><a id="join" href="#">Join Us</a></li>
+                        <li><a id="news" href="#">News</a></li>
+                        <li><a id="pro" href="#">Programs</a></li>
+                        <li><a id="res" href="#">Resources</a></li>
+                        <li><a id="sup" href="#">Superstar</a></li>
+                    </ul>
+                    <br/>
+               </div>
+               
+            </div>
+            </div>
+            
+            <div>
+                <img src="{!$Resource.Register}" style="margin-top:20px; float:left; height:100px; width:400px;"/>
+            </div>
+            
+        </div>
+        <apex:componentBody />
+</apex:component>

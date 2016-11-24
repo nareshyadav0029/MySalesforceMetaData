@@ -1,0 +1,15 @@
+<apex:page controller="AccountDetailsController" tabStyle="Student__c">
+    <apex:form >
+    <apex:pageBlock >
+        <apex:pageBlockSection columns="1" title="Account Details">
+            <apex:pageBlockTable value="{!accountdetail}" var="acc">
+                <apex:column value="{!acc.name}"/>
+                <apex:column value="{!acc.AccountNumber}"/>
+                <apex:column value="{!acc.Phone}"/>
+                <apex:column value="{!acc.Website}"/>
+                <apex:column ><apex:commandButton value="Add Contacts" action="{!Redirect}"/></apex:column>
+            </apex:pageBlockTable>
+        </apex:pageBlockSection>
+    </apex:pageBlock>
+    </apex:form>
+</apex:page>

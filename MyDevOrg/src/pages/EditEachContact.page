@@ -1,0 +1,41 @@
+<apex:page controller="EditEachContactController" tabStyle="Contact">
+<apex:form >
+    <apex:pageBlock id="rend">
+    
+
+    
+    <apex:actionStatus id="Edit" startText="Editing Contact"/>
+    <apex:actionFunction name="EditAble" status="Edit" reRender="Update" action="{!Toggle}">
+        <apex:param assignTo="{!conid}" name="ModalId" value=""/>
+    </apex:actionFunction>
+    
+
+    
+        <apex:pageBlockSection columns="1" Title="Edit Contact">
+            <apex:pageBlockTable value="{!modaledit}" var="modal" id="Update">
+                <apex:column headerValue="S.No" value="{!modal.s_no}"/>
+                <apex:column headerValue="Firstname">
+                    <apex:inputField rendered="{!modal.flag}" value="{!modal.contact.firstname}"/>
+                    <apex:outputField rendered="{!!modal.flag}" value="{!modal.contact.firstname}"/>
+                </apex:column>
+                <apex:column headerValue="Lastname">
+                    <apex:inputField rendered="{!modal.flag}" value="{!modal.contact.lastname}"/>
+                    <apex:outputField rendered="{!!modal.flag}" value="{!modal.contact.lastname}"/>
+                </apex:column>
+                <apex:column headerValue="Email">
+                    <apex:inputField rendered="{!modal.flag}" value="{!modal.contact.email}"/>
+                    <apex:outputField rendered="{!!modal.flag}" value="{!modal.contact.email}"/>
+                </apex:column>
+                <apex:column headerValue="CheckBox">
+                    <apex:inputCheckbox value="{!modal.flag}" onclick="EditAble('{!modal.id}')"/>
+                </apex:column>
+            </apex:pageBlockTable>
+        </apex:pageBlockSection>
+        
+        <apex:pageBlockButtons location="top">
+            <apex:commandButton value="Save" action="{!Save}"/>
+        </apex:pageBlockButtons>
+        
+    </apex:pageBlock>
+</apex:form>
+</apex:page>

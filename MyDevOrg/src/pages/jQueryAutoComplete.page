@@ -1,0 +1,123 @@
+<apex:page controller="jQueryAutoCompleteController" tabStyle="contact">
+<apex:form >
+    <apex:includeScript value="{!URLFOR($Resource.jQueryAutoComplete, 'js/jquery-1.6.2.min.js')}"/>
+    <apex:includeScript value="{!URLFOR($Resource.jQueryAutoComplete, 'js/jquery-ui-1.8.16.custom.min.js')}"/>
+    <apex:stylesheet value="{!URLFOR($Resource.jQueryAutoComplete, 'css/ui-lightness/jquery-ui-1.8.16.custom.css')}"/>
+    <script>
+        
+        var data = {!jsonString};
+        
+        $(function() {
+        
+        $( "[id$=search]" ).autocomplete(
+        {
+            source:data,
+            select: function( event, ui ) {
+            $( "[id$=search]" ).val('');
+            $("[id$=selectedEmail]").append("<span class='spanclass'><div class='divName'>"+ui.item.label+"<input type='hidden' class='myemail' value='"+ui.item.value+"'/></div><div class='myspan'> x </div></span>");
+            demo();
+            return false;
+            
+        }
+        }).data( "autocomplete" )._renderItem = function( ul, item ) {
+             return $( "<li></li>" )
+            .data( "item.autocomplete", item )
+            .append( "<a><table border='0' cellspacing='2' cellpadding='0'><tr><td rowspan='2'><img src='https://c.ap1.content.force.com/servlet/servlet.FileDownload?file="+item.imgUrl+"' heigth='30' width='30'/></td><td>" + item.label+"</td></tr><tr><td style='color: gray;font-size: 10px'>"+item.value+"</td></tr></table></a>" )
+            .appendTo( ul );
+           
+            
+        };
+        function demo() {
+            $(".myspan").click(function(){
+                $(this).parent().remove();
+            });
+            $(".myemail").mouseover(function(){});   
+        }
+        
+     });
+     function sendEmail(){
+            var emails='';
+            $(".myemail").each(function(){
+                emails = emails + $(this).val()+',';
+            });
+            if(emails.length > 0){
+                //alert(emails);
+                emails = emails.substring(0,emails.length-1);
+                //alert(emails);
+                $("[id$=emailToHidden]").val(emails);
+                sendMessage();
+            }
+                
+        }  
+    </script>
+    <style>
+        .ui-autocomplete {
+        max-height: 200px;
+        overflow-y: auto;
+        /* prevent horizontal scrollbar */
+        overflow-x: hidden;
+        /* add padding to account for vertical scrollbar */
+        padding-right: 10px;
+        }
+        
+        .spanclass{
+            float:left;  
+            border-radius:3px; 
+            margin-left:5px;
+            margin-top:3px; 
+            border border:1px gray solid;
+        }
+        .divName{
+            float:left;
+            border-bottom-left-radius:2px; 
+            border-top-left-radius:2px; 
+            padding:5px; 
+            background:#E2E2E2;  
+        }
+        .myspan{
+            background:#CCCCCC;
+            border-bottom-right-radius:2px; 
+            border-top-right-radius:2px; 
+            cursor:pointer; 
+            float:left; 
+            padding:5px;
+        }
+    </style>
+        <apex:actionFunction name="sendMessage" action="{!sendEmail}"/>   
+        <apex:pageBlock title="Jquery AutoComplete Email Address">
+             <apex:inputHidden id="emailToHidden" value="{!emailTo}"/>
+             <apex:pageBlockSection columns="2" title="Compose Email" collapsible="false">
+                 <!-- To Email Address -->
+                 <apex:pageBlockSectionItem dataStyle="text-align:right;">
+                     <apex:outputLabel style="text-align:rigth; padding-right:20px;"> To </apex:outputLabel>
+                 </apex:pageBlockSectionItem>
+                 <apex:pageBlockSectionItem dataStyle="background:white;">
+                     <apex:outputPanel layout="block">
+                         <apex:outputPanel layout="block" id="selectedEmail"></apex:outputPanel>
+                         <apex:inputText style="border:0px; margin-top:3px; padding:5px;" id="search"/>
+                     </apex:outputPanel>
+                 </apex:pageBlockSectionItem>
+                 
+                 <!-- Subject -->
+                 <apex:pageBlockSectionItem dataStyle="text-align:right;" >
+                     <apex:outputLabel style="text-align:rigth; padding-right:20px;"> Subject </apex:outputLabel>
+                 </apex:pageBlockSectionItem>
+                 <apex:pageBlockSectionItem >
+                     <apex:inputText value="{!subject}"/>
+                 </apex:pageBlockSectionItem>
+                 
+                 <!-- Body -->
+                 <apex:pageBlockSectionItem dataStyle="text-align:right;">
+                     <apex:outputLabel style="text-align:rigth; padding-right:20px;" > Body </apex:outputLabel>
+                 </apex:pageBlockSectionItem>
+                 <apex:pageBlockSectionItem >
+                     <apex:inputTextarea value="{!body}" richText="true"/>
+                 </apex:pageBlockSectionItem>
+                 
+             </apex:pageBlockSection>
+             <apex:pageBlockButtons location="bottom">
+                 <apex:commandButton value="Send Email" onclick="sendEmail(); return false;"/>
+             </apex:pageBlockButtons>
+        </apex:pageBlock>
+</apex:form>
+</apex:page>

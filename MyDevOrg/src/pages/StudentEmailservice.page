@@ -1,0 +1,14 @@
+<apex:page controller="StudentEmailserviceController" tabStyle="Student__c">
+    <apex:form >
+    <apex:pageBlock >
+        <apex:pageBlockSection columns="1" title="Student Details">
+            <apex:pageBlockTable value="{!student_list}" var="stu">
+                <apex:column value="{!stu.Name}"/>
+                <apex:column value="{!stu.Class__c}"/>
+                <apex:column value="{!stu.Email__c}"/>
+                <apex:column > <apex:inputCheckbox /> </apex:column>
+            </apex:pageBlockTable>
+        </apex:pageBlockSection>
+    </apex:pageBlock>
+    </apex:form>
+</apex:page>

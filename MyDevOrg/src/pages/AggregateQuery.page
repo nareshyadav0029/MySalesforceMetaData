@@ -1,0 +1,10 @@
+<apex:page controller="AggregateQueryController" tabStyle="Class__c">
+    <apex:pageBlock >
+        <apex:pageBlockSection columns="1" title="Details" collapsible="true">
+            <apex:pageBlockTable value="{!StudentCount}" var="stu">
+                <apex:column headerValue="ClassName" value="{!stu.classname}"/>
+                <apex:column headerValue="No. of Students" value="{!stu.count}"/>
+            </apex:pageBlockTable>
+        </apex:pageBlockSection>
+    </apex:pageBlock>
+</apex:page>

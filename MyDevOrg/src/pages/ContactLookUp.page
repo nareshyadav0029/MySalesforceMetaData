@@ -1,0 +1,35 @@
+<apex:page controller="CustomEmailTemplateController" sidebar="false">
+    
+    <style>
+        .name{
+            text-decoration:none !important;
+        }
+    </style>
+    
+    <script language="JavaScript" type="text/javascript">
+            function CloseAndRefresh(name, email){
+               window.opener.document.getElementById("pg:frm:pgblk:conName").value = name;
+               window.opener.document.getElementById("pg:frm:conemail").value = email;
+               window.close();
+            
+            }
+    </script>
+    
+    <apex:form >
+        <apex:pageBlock >
+            <table>
+                <tr>
+                    <td><apex:inputtext value="{!con_name}" html-placeholder="Enter Contact Name"/></td>
+                    <td><apex:commandButton value="Search" action="{!contact_search}"/></td>
+                </tr>
+            </table>
+            <apex:pageBlockSection columns="1">
+                <apex:pageBlockTable value="{!con_list}" var="con">
+                    <apex:column >
+                        <apex:commandLink value="{!con.name}" onclick="CloseAndRefresh('{!con.name}', '{!con.email}'); return false;" styleClass="name"/>
+                    </apex:column>
+                </apex:pageBlockTable>
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

@@ -1,0 +1,124 @@
+<apex:page id="pg" controller="TimeSheetController" standardStylesheets="false" sidebar="false" showHeader="false">
+    <apex:includeScript value="{!$Resource.Bootstrap}"/>    
+    <style type="text/css">
+        @import "{!$Resource.BootstrapCss}";
+        
+        .custPopup{ 
+            background-color: white; 
+            border-width: 0px; 
+            border-radius:10px; 
+            z-index: 9999; 
+            left: 50%; 
+            padding:20px; 
+            position: absolute;
+            /* These are the 3 css properties you will need to change so the popup displays in the center of the screen. First set the width. Then set margin-left to negative half of what the width is. You can add the height property for a fixed size pop up if you want.*/ 
+            margin-left: -100px; top:40%; 
+        } 
+        .popupBackground{ 
+            background-color:black; 
+            opacity: 0.80; 
+            filter: alpha(opacity = 30); 
+            position: absolute; 
+            width: 100%; 
+            height: 100%; 
+            top: 0; 
+            left: 0; 
+            z-index: 9998; 
+        }
+        
+        #stdcd { display:none; } 
+        @media only screen and (max-width: 500px){ 
+            #stdtb { display:none; } 
+            #stdcd { display:block; } 
+        }  
+        
+    </style>
+    <!-- Container starts here div -->
+    <div class="container-fluid">
+        <apex:form id="frm">
+            <apex:actionStatus id="status">
+                <apex:facet name="start"> 
+                    <apex:outputPanel id="tstpopup"> 
+                        <apex:outputPanel styleClass="popupBackground" layout="block"/> 
+                        <apex:outputPanel styleClass="custPopup" layout="block"> 
+                            <img src="/img/loading24.gif" style="vertical-align:middle; horizontal-align:middle"/> 
+                            <span>Please wait...</span> 
+                        </apex:outputPanel> 
+                    </apex:outputPanel>
+                </apex:facet>
+            </apex:actionStatus>
+            <apex:actionFunction name="check" action="{!CreateCal}" status="status" reRender="frm,op,op1"/>
+        
+            <div class="row">
+                <div class="nav navbar-inverse">
+                    <div class="navbar-header">
+                        <a class="navbar-brand" style="font-size: x-large;font-weight: 700;">Time Sheet</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <table class="table">
+                    <tr>
+                        <td><label>Month</label></td>
+                        <td>
+                            <apex:selectList size="1" multiselect="false" value="{!selectedMonth}" styleClass="form-control" onchange="check(); return false;">
+                                <apex:selectOptions value="{!selectMonth}"/>
+                            </apex:selectList>
+                        </td>
+                        <td><label>Year</label></td>
+                        <td>
+                            <apex:selectList size="1" multiselect="false" value="{!selectedYear}" styleClass="form-control" onchange="check(); return false;">
+                                <apex:selectOptions value="{!selectYear}"/>
+                            </apex:selectList>
+                        </td>
+                        <td><label>Resource</label></td>
+                        <td>
+                            <apex:selectList size="1" multiselect="false" value="{!selectedContact}" styleClass="form-control" onchange="check(); return false;">
+                                <apex:selectOptions value="{!selectContact}"/>
+                            </apex:selectList>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <!-- Div for Standard table or full screen starts here -->
+            <div id="stdtb">
+                <apex:outputPanel id="op" styleClass="row" rendered="{!dateList.size>0}">
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <tr>
+                                <td><label>Projects</label></td>
+                                <apex:repeat value="{!dateList}" var="d">
+                                    <td bgcolor="{!IF(MOD(d-DATE(1900,1,6),7)== 1,'#5cb85c','white')}">
+                                        <b><apex:outputText value="{0,date,d-MMM E}">
+                                             <apex:param value="{!d}" />
+                                        </apex:outputText></b>    
+                                    </td>
+                                </apex:repeat>
+                            </tr>
+                            <apex:repeat value="{!showProjectList}" var="p">
+                                <tr>
+                                    <td>
+                                        {!p.name}
+                                    </td>
+                                    <apex:repeat value="{!dateList}" var="d">
+                                         <apex:repeat value="{!holidayList}" var="h">
+                                       
+                                            <td bgcolor="{! IF(MOD(d-DATE(1900,1,6),7) == 1,'#5cb85c', IF(AND(d>=h.Start_Date__c,d<= h.End_Date__c),'red','')) }">
+                                                 <apex:outputText value="{!IF(p.Work_Day__c == d,p.Working_Hours__c,'')}" />
+                                            </td>
+                                         </apex:repeat>
+                                    </apex:repeat>
+                                </tr>
+                            </apex:repeat>
+                        </table>
+                    </div>
+                </apex:outputPanel>
+            </div>
+            <!-- Div for Standard table or full screen ends here -->
+            
+        </apex:form>
+        
+    </div>
+    <!-- Container ends here div -->
+</apex:page>

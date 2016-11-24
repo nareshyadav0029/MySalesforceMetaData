@@ -1,0 +1,95 @@
+<apex:page id="pg" controller="CustomEmailTemplateController" tabStyle="Contact" sidebar="false">
+    
+    <style>
+        .input{
+            margin-left:15px;
+        }
+    </style>
+    
+    <script>
+        function openPopUpWindow(){
+            var newWin = null;
+            var url="/apex/ContactLookUp";       
+            window.open(url , 'LookUp' ,'width=400,height=650');
+        }
+        function openPopUpWindow1(){
+            var newWin = null;
+            var url="/apex/Additional_To";       
+            window.open(url , 'LookUp' ,'width=400,height=650');
+        }
+        
+        function check(){
+            var email = document.getElementById("pg:frm:conemail").value;
+            var list = document.getElementById("pg:frm:pgblk:select").value;
+            if(email == null || email == ''){
+                alert("Please Select Recipiant !!!");
+            }
+            else{
+                return true;
+            }
+            return false;
+        }
+        
+    </script>
+
+    <apex:form id="frm" >
+        <apex:pageMessages ></apex:pageMessages>
+    <apex:sectionHeader title="Email" subtitle="Template"/>
+        <apex:actionRegion >
+        <apex:inputHidden value="{!con_email}" id="conemail"/>
+        
+           <apex:pageBlock id="pgblk" title="Send Custom Email">
+                <apex:pageMessages ></apex:pageMessages>
+            <apex:actionStatus id="Get" startText="Wait..."/>
+            <apex:actionFunction status="Get" name="getemail" action="{!getBody}" reRender="pgblk"/>
+           
+            
+            <apex:pageBlockButtons location="both">
+                <apex:commandButton value="Send" action="{!Send_Email}" onclick="return check();" style="margin-left:150px;"/>
+            </apex:pageBlockButtons>
+            <table align="center">
+                <tr>
+                    <td align="right"> <apex:outputLabel value="To" style="font-weight:bold;"/></td>
+                    <apex:inputHidden id="conid"/>
+                    <td><apex:inputText id="conName" html-placeholder="Enter Email" styleClass="input"/> <apex:image id="image" value="{!$Resource.Contact_Search}" onclick="openPopUpWindow(); return false;" style="cursor:pointer; margin-left:5px;" height="20px" width="20px"/> </td>
+                </tr>
+                <tr>
+                    <td align="right"> <apex:outputLabel value="Additional To" style="font-weight:bold;"/></td>
+                    <td><apex:inputTextarea value="{!add_email}" id="add" html-placeholder="Add More Email Addresses" rows="5" cols="25" style="margin-top:10px;" styleClass="input"/> <apex:image id="image1" value="{!$Resource.Contact_Search}" onclick="openPopUpWindow1(); return false;" style="cursor:pointer; margin-left:5px;" height="20px" width="20px"/> </td>
+                </tr>
+                <tr>
+                    <td align="right"> <apex:outputLabel value="Account" style="font-weight:bold;"/></td>
+                    <td>  
+                        <apex:selectList value="{!selected_acc}" onchange="getemail(); return false;" size="1" multiselect="false" style="width:300px; margin-top:10px;" styleClass="input" >
+                            <apex:selectOptions value="{!select_acc}" />
+                        </apex:selectList>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right"> <apex:outputLabel value="Email Template" style="font-weight:bold;"/></td>
+                    <td>  
+                        <apex:selectList id="select" value="{!selected_email}" onchange="getemail(); return false;" size="1" multiselect="false" style="width:300px; margin-top:10px;" styleClass="input" >
+                            <apex:selectOptions value="{!select_email}" />
+                        </apex:selectList>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right"> <b>Subject</b> </td>
+                    <td> <apex:inputText value="{!subject}" html-placeholder="Enter Subject" style="width:300px; margin-top:10px;" styleClass="input"/> </td>
+                </tr>
+                <tr>
+                    <td align="right"> <b>Email Body</b> </td>
+                    <td> <apex:inputTextarea value="{!emailBody}" html-placeholder="Enter Message you want to send" cols="25" rows="15" style="width:300px; margin-top:10px;" styleClass="input"/> </td>
+                </tr>
+            </table>    
+        </apex:pageBlock>
+       </apex:actionRegion> 
+       
+        <apex:pageBlock id="pgblkk" title="Attachment">
+                <apex:pageBlockSection >
+                    <apex:inputFile id="attach" styleclass="input" contentType="{!attach.contentType}" value="{!attach.body}" fileName="{!attach.name}" />
+            </apex:pageBlockSection> 
+        </apex:pageBlock> 
+        
+    </apex:form>
+</apex:page>

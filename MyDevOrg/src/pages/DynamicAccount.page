@@ -1,0 +1,201 @@
+<apex:page standardController="Account" extensions="DynamicAccountController">
+    
+    <apex:includeScript value="{!URLFOR($Resource.jQueryAutoComplete, 'js/jquery-1.6.2.min.js')}"/>
+    <apex:includeScript value="{!URLFOR($Resource.jQueryAutoComplete, 'js/jquery-ui-1.8.16.custom.min.js')}"/>
+    <apex:stylesheet value="{!URLFOR($Resource.jQueryAutoComplete, 'css/ui-lightness/jquery-ui-1.8.16.custom.css')}"/>
+    
+    <apex:sectionHeader title="Account Edit" subtitle="{!IF(account.Name == null, 'New Account', account.Name)}"/>
+    
+    <style>
+        .ui-autocomplete{
+            overflow-y: scroll;
+            height: 120px; 
+        }
+        .modalBody{ 
+            background-color: white; 
+            border-width: 0px; 
+            border-radius:5px; 
+            z-index: 9999; 
+            left: 35%; 
+            padding:5px 10px 5px 5px; 
+            position: fixed;
+            height:300px;
+            width:50%;
+            /* These are the 3 css properties you will need to change so the popup displays in the center of the screen. First set the width. Then set margin-left to negative half of what the width is. You can add the height property for a fixed size pop up if you want.*/ 
+            margin-left: -100px; top:40%; 
+        } 
+        .modalBackground{ 
+            background-color:black; 
+            opacity: 0.55; 
+            filter: alpha(opacity = 30); 
+            position: fixed; 
+            width: 100%; 
+            height: 100%; 
+            top: 0; 
+            left: 0; 
+            z-index: 9998; 
+        }
+        .modalHeader{
+            height:40px;
+            width:100%;
+            border-bottom:1px solid lightgrey;
+        }
+        .modalContent{
+            height: 200px;
+            width: 100%;
+            border-bottom: 1px solid lightgrey;
+        }
+        .close{
+            float: right;
+            font-size: 21px;
+            font-weight: 700;
+            line-height: 1;
+            text-shadow: 0 1px 0 #fff;
+            border: none;
+            background: white;
+            cursor: pointer;
+        }
+        .close > span {
+            background: white;
+        }
+        .closeBtn{
+            float: right;
+            color: #333;
+            background: #fff !important;
+            border-color: #ccc !important;
+            padding: 6px 12px;
+            margin-bottom: 0;
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 1.42857143;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: middle;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .addressLabel{
+            width: 100%;
+            float: left;
+            padding: 15px 15px 10px 15px;
+            font-size: 15px;
+            font-weight: 600;
+        }
+        .address{
+            margin: 0px 5px 0px 14px;
+            width: 60%;
+        }
+        .ui-autocomplete-loading {
+            background: white url({!URLFOR($Resource.jQueryAutoComplete, 'images/ui-anim_basic_16x16.gif')}) right center no-repeat;
+        }
+    </style>
+    
+    <script>
+        $( document ).ready(function() {
+            $('#modal').css('display', 'none');
+            $('.modalBackground').css('display', 'none');
+            $('.modalBody').css('display', 'none');
+        });
+        
+        function showModal(){
+            $('.address').val('');
+            $('#modal').css('display', 'block');
+            $('.modalBackground').css('display', 'block');
+            $('.modalBody').css('display', 'block');
+        }
+        
+        function dismissModal(){
+            $('#modal').css('display', 'none');
+            $('.modalBackground').css('display', 'none');
+            $('.modalBody').css('display', 'none');
+        }
+        
+        function requestData(){
+            <!--    Ajax request for to fetch data from heroku    -->
+            var projects = [];
+            console.log('Calling');
+            var addressString = $('.address').val();
+            var postcode = $(".bPostCode").val();
+            $( ".address" ).autocomplete({
+                source: function( request, response ){
+                    $.ajax({
+                        type : 'GET',
+                        crossDomain: true,
+                        url: 'https://addressvalidate.herokuapp.com/?stname='+addressString+'&pcode='+postcode,
+                        success: function(result){
+                            for(var i=0;i<result.length;i++){
+                                var rec = new Object();
+                                rec.value=""+result[i].street_name+" "+result[i].locality_name+" "+result[i].state_abbreviation+" "+result[i].postcode+"";
+                                rec.label=""+result[i].street_name+" "+result[i].locality_name+" "+result[i].state_abbreviation+" "+result[i].postcode+"";
+                                projects.push(rec); 
+                            }
+                            response(projects);
+                            console.log('Done');
+                        }
+                    });
+                 },
+                  minLength: 4,
+                  focus: function( event, ui ) {
+                      $(this).val(ui.item.label);
+                      return false;
+                  },
+                  select: function( event, ui ){                                              
+                      var arr = []; 
+                      arr = ui.item.value.split(' ');
+                      $(".bStreet").val(arr[0]);
+                      $(".bCity").val(arr[1]);
+                      $(".bState").val(arr[2]);
+                      //$(".bPostCode").val(arr[3]);
+                      
+                      $('#modal').css('display', 'none');
+                      $('.modalBackground').css('display', 'none');
+                      $('.modalBody').css('display', 'none');                      
+                      return false;
+                 }
+            }).data( "autocomplete" )._renderItem = function( ul, item ) {
+                  return $( "<li></li>" )
+                  .data( "item.autocomplete", item )                     
+                  .append( "<a>" + item.label +"</a>" ).appendTo( ul );
+              };
+            <!-- AUTOCOMPLETE ENDS HERE -->
+        }
+    </script>
+    
+    <apex:form id="frm">
+    
+        <div id="modal"> 
+            <div class="modalBackground"/> 
+            <div class="modalBody">
+                <div id="modalHeader" class="modalHeader">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="dismissModal();return false;">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                
+                <div id="modalContent" class="modalContent">
+                    <label id="addressLabel" class="addressLabel">please enter the address below : </label>
+                    <input type="text" name="txtaddress" id="address" class="address" onkeypress="requestData();"/>
+                </div>
+                
+                <div id="modalFooter" class="modalFooter">
+                    <button type="button" class="closeBtn" data-dismiss="modal" aria-label="Close" onclick="dismissModal();return false;">
+                        <span aria-hidden="true">Close</span>
+                    </button>
+                </div>
+            </div> 
+        </div>
+    
+        <apex:pageBlock title="Account Edit" mode="Edit">
+            <apex:pageBlockSection columns="2" title="Account Information">
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Address Information" columns="2">
+                <apex:inputField value="{!account.BillingPostalCode}" styleClass="bPostCode"/>
+                <apex:inputField value="{!account.BillingStreet}" styleClass="bStreet" onclick="showModal();return false;"/>
+                <apex:inputField value="{!account.BillingCity}" styleClass="bCity"/>
+                <apex:inputField value="{!account.BillingState}" styleClass="bState"/>
+                <apex:inputField value="{!account.BillingCountry}" styleClass="bCountry"/>
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:form>
+    
+</apex:page>
